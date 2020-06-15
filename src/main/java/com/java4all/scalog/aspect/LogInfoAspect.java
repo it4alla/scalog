@@ -108,6 +108,7 @@ public class LogInfoAspect {
         LOGGER.info("remoteAddr = {}",remoteAddr);
         LOGGER.info("argsStr = {}",argsStr);
 
+        //TODO insert into the db,user mapper or jdbc?
     }
 
     @After("pointCut()")
