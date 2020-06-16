@@ -44,5 +44,6 @@ public class UserController {
         LOGGER.info("test0调用结果为 = {}",s);
         return new User("张三",88);
     }
+    //http://192.168.158.80:8888/user/test3?name=%E7%BA%A2%E7%8B%AE&age=18
 
 }
