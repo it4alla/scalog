@@ -50,7 +50,6 @@ public class LogInfoAspect {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogInfoAspect.class);
     private static final String LOG_TABLE = "log_info";
-    private static AtomicInteger INIT = new AtomicInteger(1);
 
     private static final String INSERT_LOG_SQL =
             "insert into " + LOG_TABLE +
@@ -70,10 +69,10 @@ public class LogInfoAspect {
             new NameThreadFactory(),new CallerRunsPolicy());
 
     /**
+     * *.controller
      * include subclass package
-     * TODO get from configure file
      */
-    @Pointcut("execution(* com.java4all.scalog.controller..*.*(..))")
+    @Pointcut("execution(* com.*..*.controller..*.*(..))")
     public void pointCut(){}
 
     @Around("pointCut()")
@@ -171,6 +170,7 @@ public class LogInfoAspect {
             ps.setString(15,"userid");
             ps.setString(16,"username");
             ps.setInt(17,1);
+            //todo
             ps.setDate(18,new Date(11111L));
             ps.setDate(19,new Date(4444444L));
             ps.setDate(20,new Date(System.currentTimeMillis()));

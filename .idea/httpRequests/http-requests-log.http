@@ -1,8 +1,24 @@
-GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
+GET http://192.168.158.80:8888/user/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075158-3.200.json
+<> 2020-06-17T081603-1.200.json
+
+###
+
+GET http://192.168.158.80:8888/user/decrease?name=刘树人&age=54
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-06-17T081603.200.json
+
+###
+
+GET http://192.168.158.80:8888/user/decrease?name=刘树人&age=54
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-06-17T081602.200.json
 
 ###
 
@@ -10,7 +26,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075158-2.200.json
+<> 2020-06-17T081552.200.json
 
 ###
 
@@ -18,7 +34,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075158-1.200.json
+<> 2020-06-17T081551.200.json
 
 ###
 
@@ -26,7 +42,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075158.200.json
+<> 2020-06-17T081550.200.json
 
 ###
 
@@ -34,7 +50,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075157-6.200.json
+<> 2020-06-17T081507.200.json
 
 ###
 
@@ -42,7 +58,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075157-5.200.json
+<> 2020-06-17T081506.200.json
 
 ###
 
@@ -50,7 +66,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075157-4.200.json
+<> 2020-06-17T081502.200.json
 
 ###
 
@@ -58,7 +74,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075157-3.200.json
+<> 2020-06-17T081436-2.200.json
 
 ###
 
@@ -66,7 +82,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075157-2.200.json
+<> 2020-06-17T081436-1.200.json
 
 ###
 
@@ -74,7 +90,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075157-1.200.json
+<> 2020-06-17T081436.200.json
 
 ###
 
@@ -82,7 +98,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075157.200.json
+<> 2020-06-17T081435-2.200.json
 
 ###
 
@@ -90,7 +106,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075156-7.200.json
+<> 2020-06-17T081435-1.200.json
 
 ###
 
@@ -98,7 +114,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075156-6.200.json
+<> 2020-06-17T081435.200.json
 
 ###
 
@@ -106,7 +122,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075156-5.200.json
+<> 2020-06-17T081417-4.200.json
 
 ###
 
@@ -114,7 +130,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075156-4.200.json
+<> 2020-06-17T081417-3.200.json
 
 ###
 
@@ -122,7 +138,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075156-3.200.json
+<> 2020-06-17T081417-2.200.json
 
 ###
 
@@ -130,7 +146,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075156-2.200.json
+<> 2020-06-17T081417-1.200.json
 
 ###
 
@@ -138,7 +154,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075156-1.200.json
+<> 2020-06-17T081417.200.json
 
 ###
 
@@ -146,7 +162,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075156.200.json
+<> 2020-06-17T080359-1.200.json
 
 ###
 
@@ -154,7 +170,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075155-5.200.json
+<> 2020-06-17T080359.200.json
 
 ###
 
@@ -162,7 +178,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075155-4.200.json
+<> 2020-06-17T080358-7.200.json
 
 ###
 
@@ -170,7 +186,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075155-3.200.json
+<> 2020-06-17T080358-6.200.json
 
 ###
 
@@ -178,7 +194,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075155-2.200.json
+<> 2020-06-17T080358-5.200.json
 
 ###
 
@@ -186,7 +202,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075155-1.200.json
+<> 2020-06-17T080358-4.200.json
 
 ###
 
@@ -194,7 +210,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075155.200.json
+<> 2020-06-17T080358-3.200.json
 
 ###
 
@@ -202,7 +218,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075154-5.200.json
+<> 2020-06-17T080358-2.200.json
 
 ###
 
@@ -210,7 +226,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075154-4.200.json
+<> 2020-06-17T080358-1.200.json
 
 ###
 
@@ -218,7 +234,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075154-3.200.json
+<> 2020-06-17T080358.200.json
 
 ###
 
@@ -226,7 +242,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075154-2.200.json
+<> 2020-06-17T080357-3.200.json
 
 ###
 
@@ -234,7 +250,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075154-1.200.json
+<> 2020-06-17T080357-2.200.json
 
 ###
 
@@ -242,7 +258,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075154.200.json
+<> 2020-06-17T080357-1.200.json
 
 ###
 
@@ -250,7 +266,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075153-4.200.json
+<> 2020-06-17T080357.200.json
 
 ###
 
@@ -258,7 +274,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075153-3.200.json
+<> 2020-06-17T080237-4.200.json
 
 ###
 
@@ -266,7 +282,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075153-2.200.json
+<> 2020-06-17T080237-3.200.json
 
 ###
 
@@ -274,7 +290,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075153-1.200.json
+<> 2020-06-17T080237-2.200.json
 
 ###
 
@@ -282,7 +298,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075153.200.json
+<> 2020-06-17T080237-1.200.json
 
 ###
 
@@ -290,7 +306,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075152-2.200.json
+<> 2020-06-17T080237.200.json
 
 ###
 
@@ -298,7 +314,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075152-1.200.json
+<> 2020-06-17T080236-4.200.json
 
 ###
 
@@ -306,7 +322,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T075152.200.json
+<> 2020-06-17T080236-3.200.json
 
 ###
 
@@ -314,7 +330,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T074617-1.200.json
+<> 2020-06-17T080236-2.200.json
 
 ###
 
@@ -322,7 +338,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T074617.200.json
+<> 2020-06-17T080236-1.200.json
 
 ###
 
@@ -330,7 +346,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T074616-5.200.json
+<> 2020-06-17T080236.200.json
 
 ###
 
@@ -338,7 +354,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T074616-4.200.json
+<> 2020-06-17T080235.200.json
 
 ###
 
@@ -346,7 +362,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T074616-3.200.json
+<> 2020-06-17T080148.200.json
 
 ###
 
@@ -354,7 +370,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T074616-2.200.json
+<> 2020-06-17T080147-3.200.json
 
 ###
 
@@ -362,7 +378,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T074616-1.200.json
+<> 2020-06-17T080147-2.200.json
 
 ###
 
@@ -370,7 +386,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T074616.200.json
+<> 2020-06-17T080147-1.200.json
 
 ###
 
@@ -378,23 +394,7 @@ GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
-<> 2020-06-17T074615-6.200.json
-
-###
-
-GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
-Accept: */*
-Cache-Control: no-cache
-
-<> 2020-06-17T074615-5.200.json
-
-###
-
-GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
-Accept: */*
-Cache-Control: no-cache
-
-<> 2020-06-17T074615-4.200.json
+<> 2020-06-17T080147.200.json
 
 ###
 
