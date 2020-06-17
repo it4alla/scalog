@@ -45,9 +45,9 @@ public class LogInfoAspect {
 
     @Around("pointCut()")
     public Object aroundPointCut(ProceedingJoinPoint joinPoint) throws Throwable {
-        String resultStr;
         long startTime = System.currentTimeMillis();
         Object proceed = joinPoint.proceed();
+        long endTime = System.currentTimeMillis();
 
         ServletRequestAttributes attributes =
                 (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
@@ -77,7 +77,15 @@ public class LogInfoAspect {
             }
             return proceed;
         }
+        //use Gson can resolve the args contains File,FastJson is not support
+        String result = new Gson().toJson(proceed);
+        long cost = endTime - startTime;
+        this.writeLog(joinPoint, cost, result, request, clazz, method);
+        return proceed;
+    }
 
+    private void writeLog(ProceedingJoinPoint joinPoint, long cost, String result,
+            HttpServletRequest request, Class<? extends MethodSignature> clazz, Method method) {
         String companyName = "";
         String projectName = "";
         String moduleName = "";
@@ -110,13 +118,8 @@ public class LogInfoAspect {
         LOGGER.info("methodName = {}",methodName);
         LOGGER.info("remoteAddr = {}",remoteAddr);
         LOGGER.info("argsStr = {}",argsStr);
-
-        //use Gson can resolve the args contains File,FastJson is not support
-        resultStr = new Gson().toJson(proceed);
-        long endTime = System.currentTimeMillis();
-        LOGGER.info("返回值 = {}", resultStr);
-        LOGGER.info("执行时间 = {} ms",endTime - startTime);
-        return proceed;
+        LOGGER.info("返回值 = {}", result);
+        LOGGER.info("执行时间 = {} ms",cost);
     }
 
 }
