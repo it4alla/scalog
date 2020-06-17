@@ -2,15 +2,11 @@ package com.java4all.scalog.aspect;
 
 import com.google.gson.Gson;
 import com.java4all.scalog.annotation.LogInfo;
-import com.java4all.scalog.utils.IpAddressUtil;
 import java.lang.reflect.Method;
 import javax.servlet.http.HttpServletRequest;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
@@ -36,7 +32,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Component
 public class LogInfoAspect {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LogInfo.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogInfoAspect.class);
 
 
     /**
@@ -47,9 +43,13 @@ public class LogInfoAspect {
     @Pointcut("execution(* com.java4all.scalog.controller..*.*(..))")
     public void pointCut(){}
 
-    @Before("pointCut()")
-    public void beforePointCut(JoinPoint joinPoint) {
-        ServletRequestAttributes attributes = 
+    @Around("pointCut()")
+    public Object aroundPointCut(ProceedingJoinPoint joinPoint) throws Throwable {
+        String resultStr;
+        long startTime = System.currentTimeMillis();
+        Object proceed = joinPoint.proceed();
+
+        ServletRequestAttributes attributes =
                 (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
 
@@ -63,7 +63,7 @@ public class LogInfoAspect {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug("{} not a web controller class,skip","待添加");
             }
-            return;
+            return proceed;
         }
         //not a web controller method,skip
         if(!method.isAnnotationPresent(RequestMapping.class)
@@ -75,7 +75,7 @@ public class LogInfoAspect {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug("{}.{} not a web controller method,skip","待添加","待添加");
             }
-            return;
+            return proceed;
         }
 
         String companyName = "";
@@ -111,20 +111,6 @@ public class LogInfoAspect {
         LOGGER.info("remoteAddr = {}",remoteAddr);
         LOGGER.info("argsStr = {}",argsStr);
 
-        //TODO insert into the db,user mapper or jdbc?
-    }
-
-    @After("pointCut()")
-    public void afterPointCut(JoinPoint joinPoint) {
-
-    }
-
-
-    @Around("pointCut()")
-    public Object aroundPointCut(ProceedingJoinPoint joinPoint) throws Throwable {
-        String resultStr;
-        long startTime = System.currentTimeMillis();
-        Object proceed = joinPoint.proceed();
         //use Gson can resolve the args contains File,FastJson is not support
         resultStr = new Gson().toJson(proceed);
         long endTime = System.currentTimeMillis();
