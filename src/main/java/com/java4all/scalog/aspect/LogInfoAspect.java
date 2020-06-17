@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -45,14 +46,19 @@ public class LogInfoAspect {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogInfoAspect.class);
     private static final String LOG_TABLE = "log_info";
+    private static AtomicInteger INIT = new AtomicInteger(1);
 
     private static final String INSERT_LOG_SQL =
             "insert into " + LOG_TABLE +
-                    "(`id`, `company_name`, `project_name`, `module_name`, `function_name`, `class_name`, `method_name`, `method_type`, `url`, "
-                    + "`request_params`, `result`, `remark`, `cost`, `ip`, `user_id`, `user_Name`, `log_type`,"
-                    + " `gmt_start`, `gmt_end`,`gmt_create`, `gmt_modified`)"
-            + " values "
-            + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now(), now())";
+                    "(`id`, `company_name`, `project_name`, `module_name`, `function_name`, "
+                    + "`class_name`, `method_name`, `method_type`, `url`, `request_params`,"
+                    + "`result`, `remark`, `cost`, `ip`, `user_id`, "
+                    + "`user_Name`, `log_type`,`gmt_start`, `gmt_end`,`gmt_create`, `gmt_modified`)"
+                    + " values "
+                    + "(?, ?, ?, ?, ?,"
+                    + " ?, ?, ?, ?, ?,"
+                    + " ?, ?, ?, ?, ?,"
+                    + " ?, ?, ?, ?, ?, ?)";
 
     private static ThreadPoolExecutor executor =
             new ThreadPoolExecutor(4,8,10,
@@ -107,6 +113,16 @@ public class LogInfoAspect {
         return proceed;
     }
 
+    /**
+     * write log
+     *
+     * @param joinPoint
+     * @param cost
+     * @param result
+     * @param request
+     * @param clazz
+     * @param method
+     */
     private void writeLog(ProceedingJoinPoint joinPoint, long cost, String result,
             HttpServletRequest request, Class<? extends MethodSignature> clazz, Method method) {
         String companyName = "";
@@ -135,31 +151,39 @@ public class LogInfoAspect {
             connection = SourceUtil.getConnection();
             connection.setAutoCommit(true);
             PreparedStatement ps = connection.prepareStatement(INSERT_LOG_SQL);
-            ps.setString(1,companyName);
-            ps.setString(2,projectName);
-            ps.setString(3,moduleName);
-            ps.setString(4,functionName);
-            ps.setString(5,className);
-            ps.setString(6,methodName);
-            ps.setString(7,methodType);
-            ps.setString(8,url);
-            ps.setString(9,requestParams);
-            ps.setString(10,result);
-            ps.setString(11,remark);
-            ps.setLong(12,cost);
-            ps.setString(13,ip);
-            ps.setString(14,"userid");
-            ps.setString(15,"username");
-            ps.setInt(16,1);
-            ps.setDate(17,new Date(11111L));
-            ps.setDate(18,new Date(4444444L));
+            ps.setString(1,generateId());
+            ps.setString(2,companyName);
+            ps.setString(3,projectName);
+            ps.setString(4,moduleName);
+            ps.setString(5,functionName);
+            ps.setString(6,className);
+            ps.setString(7,methodName);
+            ps.setString(8,methodType);
+            ps.setString(9,url);
+            ps.setString(10,requestParams);
+            ps.setString(11,result);
+            ps.setString(12,remark);
+            ps.setLong(13,cost);
+            ps.setString(14,ip);
+            ps.setString(15,"userid");
+            ps.setString(16,"username");
+            ps.setInt(17,1);
+            ps.setDate(18,new Date(11111L));
+            ps.setDate(19,new Date(4444444L));
+            ps.setDate(20,new Date(System.currentTimeMillis()));
+            ps.setDate(21,new Date(System.currentTimeMillis()));
             ps.execute();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+          SourceUtil.close(connection);
         }
     }
 
 
+    /**
+     * name thread factory
+     */
     private static final class NameThreadFactory implements ThreadFactory {
         private final ThreadGroup group;
         private final AtomicInteger index = new AtomicInteger(1);
@@ -179,4 +203,19 @@ public class LogInfoAspect {
             return thread;
         }
     }
+
+    /**
+     * generate id
+     * @return
+     */
+    private static String generateId() {
+        String time = LocalDate.now().toString()
+                .replace("-", "")
+                .replace("T", "")
+                .replace(":", "")
+                .replace(".", "");
+        String id = new StringBuffer().append(time).append(INIT.incrementAndGet()).toString();
+        return id;
+    }
+
 }

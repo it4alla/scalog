@@ -13,7 +13,7 @@ spring:
     filters: stat
     maxActive: 15
     initialSize: 3
-    maxWait: 5000
+    maxWait: 120000
     minIdle: 3
     timeBetweenEvictionRunsMillis: 90000
     minEvictableIdleTimeMillis: 1800000
