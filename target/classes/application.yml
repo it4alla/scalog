@@ -1,6 +1,24 @@
 server:
   port: 8888
-
 log:
   base:
     dir: com.java4all.scalog.controller
+spring:
+  datasource:
+    url: jdbc:mysql://116.62.62.26:3306/java4all?useUnicode=true&characterEncoding=UTF8&allowMultiQueries=true
+    username: root
+    password: 14789632
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    filters: stat
+    maxActive: 15
+    initialSize: 3
+    maxWait: 5000
+    minIdle: 3
+    timeBetweenEvictionRunsMillis: 90000
+    minEvictableIdleTimeMillis: 1800000
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20

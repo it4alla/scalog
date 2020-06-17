@@ -2,7 +2,12 @@ package com.java4all.scalog.aspect;
 
 import com.google.gson.Gson;
 import com.java4all.scalog.annotation.LogInfo;
+import com.java4all.scalog.utils.SourceUtil;
 import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Date;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -39,6 +44,15 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class LogInfoAspect {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogInfoAspect.class);
+    private static final String LOG_TABLE = "log_info";
+
+    private static final String INSERT_LOG_SQL =
+            "insert into " + LOG_TABLE +
+                    "(`id`, `company_name`, `project_name`, `module_name`, `function_name`, `class_name`, `method_name`, `method_type`, `url`, "
+                    + "`request_params`, `result`, `remark`, `cost`, `ip`, `user_id`, `user_Name`, `log_type`,"
+                    + " `gmt_start`, `gmt_end`,`gmt_create`, `gmt_modified`)"
+            + " values "
+            + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now(), now())";
 
     private static ThreadPoolExecutor executor =
             new ThreadPoolExecutor(4,8,10,
@@ -88,7 +102,8 @@ public class LogInfoAspect {
         //use Gson can resolve the args contains File,FastJson is not support
         String result = new Gson().toJson(proceed);
         long cost = endTime - startTime;
-        executor.execute(()-> this.writeLog(joinPoint, cost, result, request, clazz, method));
+//        executor.execute(()-> this.writeLog(joinPoint, cost, result, request, clazz, method));
+        this.writeLog(joinPoint, cost, result, request, clazz, method);
         return proceed;
     }
 
@@ -110,25 +125,38 @@ public class LogInfoAspect {
 
         String url = request.getRequestURL().toString();
         String methodType = request.getMethod();
-        String clazzStr = clazz.toString();
+        String className = clazz.toString();
         String methodName = method.getName();
-        String remoteAddr = request.getRemoteAddr();
-        String argsStr = new Gson().toJson(joinPoint.getArgs());
+        String ip = request.getRemoteAddr();
+        String requestParams = new Gson().toJson(joinPoint.getArgs());
 
-        LOGGER.info("companyName = {}",companyName);
-        LOGGER.info("projectName = {}",projectName);
-        LOGGER.info("moduleName = {}",moduleName);
-        LOGGER.info("functionName = {}",functionName);
-        LOGGER.info("remark = {}",remark);
-        LOGGER.info("url = {}",url);
-        LOGGER.info("methodType = {}",methodType);
-        LOGGER.info("clazzStr = {}",clazzStr);
-        LOGGER.info("methodName = {}",methodName);
-        LOGGER.info("remoteAddr = {}",remoteAddr);
-        LOGGER.info("argsStr = {}",argsStr);
-        LOGGER.info("返回值 = {}", result);
-        LOGGER.info("执行时间 = {} ms",cost);
-        //TODO jdbc to db
+        Connection connection = null;
+        try {
+            connection = SourceUtil.getConnection();
+            connection.setAutoCommit(true);
+            PreparedStatement ps = connection.prepareStatement(INSERT_LOG_SQL);
+            ps.setString(1,companyName);
+            ps.setString(2,projectName);
+            ps.setString(3,moduleName);
+            ps.setString(4,functionName);
+            ps.setString(5,className);
+            ps.setString(6,methodName);
+            ps.setString(7,methodType);
+            ps.setString(8,url);
+            ps.setString(9,requestParams);
+            ps.setString(10,result);
+            ps.setString(11,remark);
+            ps.setLong(12,cost);
+            ps.setString(13,ip);
+            ps.setString(14,"userid");
+            ps.setString(15,"username");
+            ps.setInt(16,1);
+            ps.setDate(17,new Date(11111L));
+            ps.setDate(18,new Date(4444444L));
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 
