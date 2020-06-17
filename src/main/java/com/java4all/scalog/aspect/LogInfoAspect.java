@@ -3,6 +3,12 @@ package com.java4all.scalog.aspect;
 import com.google.gson.Gson;
 import com.java4all.scalog.annotation.LogInfo;
 import java.lang.reflect.Method;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -34,11 +40,14 @@ public class LogInfoAspect {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogInfoAspect.class);
 
+    private static ThreadPoolExecutor executor =
+            new ThreadPoolExecutor(4,8,10,
+            TimeUnit.SECONDS,new LinkedBlockingQueue<>(10000),
+            new NameThreadFactory(),new CallerRunsPolicy());
 
     /**
-     * 拦截controller包下的所有类的所有方法，包含子包中
-     * @TODO 路径读配置文件或者注解中的，支持自定义
-     * pointCut表达式 https://www.cnblogs.com/itsoku123/p/10744244.html
+     * include subclass package
+     * TODO get from configure file
      */
     @Pointcut("execution(* com.java4all.scalog.controller..*.*(..))")
     public void pointCut(){}
@@ -52,7 +61,6 @@ public class LogInfoAspect {
         ServletRequestAttributes attributes =
                 (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
-
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Class<? extends MethodSignature> clazz = signature.getDeclaringType();
         Method method = signature.getMethod();
@@ -80,7 +88,7 @@ public class LogInfoAspect {
         //use Gson can resolve the args contains File,FastJson is not support
         String result = new Gson().toJson(proceed);
         long cost = endTime - startTime;
-        this.writeLog(joinPoint, cost, result, request, clazz, method);
+        executor.execute(()-> this.writeLog(joinPoint, cost, result, request, clazz, method));
         return proceed;
     }
 
@@ -120,6 +128,27 @@ public class LogInfoAspect {
         LOGGER.info("argsStr = {}",argsStr);
         LOGGER.info("返回值 = {}", result);
         LOGGER.info("执行时间 = {} ms",cost);
+        //TODO jdbc to db
     }
 
+
+    private static final class NameThreadFactory implements ThreadFactory {
+        private final ThreadGroup group;
+        private final AtomicInteger index = new AtomicInteger(1);
+
+        public NameThreadFactory() {
+            SecurityManager s = System.getSecurityManager();
+            group = s !=null ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+        }
+
+        @Override
+        public Thread newThread(Runnable r) {
+            Thread thread = new Thread(group, r, "Thread-LogInfo-" + index.getAndIncrement());
+            thread.setDaemon(true);
+            if (thread.getPriority() != Thread.NORM_PRIORITY) {
+                thread.setPriority(Thread.NORM_PRIORITY);
+            }
+            return thread;
+        }
+    }
 }
