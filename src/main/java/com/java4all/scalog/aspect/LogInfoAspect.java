@@ -82,12 +82,14 @@ public class LogInfoAspect {
         String projectName = "";
         String moduleName = "";
         String functionName = "";
+        String remark = "";
         if(method.isAnnotationPresent(LogInfo.class)) {
             LogInfo logInfo = method.getAnnotation(LogInfo.class);
             companyName = logInfo.companyName();
             projectName = logInfo.projectName();
             moduleName = logInfo.moduleName();
             functionName = logInfo.functionName();
+            remark = logInfo.remark();
         }
 
         String url = request.getRequestURL().toString();
@@ -101,6 +103,7 @@ public class LogInfoAspect {
         LOGGER.info("projectName = {}",projectName);
         LOGGER.info("moduleName = {}",moduleName);
         LOGGER.info("functionName = {}",functionName);
+        LOGGER.info("remark = {}",remark);
         LOGGER.info("url = {}",url);
         LOGGER.info("methodType = {}",methodType);
         LOGGER.info("clazzStr = {}",clazzStr);

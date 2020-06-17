@@ -27,6 +27,8 @@ public @interface LogInfo {
     /**功能*/
     String functionName() default "";
 
+    /**描述*/
+    String remark() default "";
 
 }
 

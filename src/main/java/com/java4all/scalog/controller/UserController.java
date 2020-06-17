@@ -37,9 +37,9 @@ public class UserController {
         return "test2";
     }
 
-    @GetMapping("test3")
-    @LogInfo(companyName = "兰亮网络科技",projectName = "新金融",moduleName = "授信模块",functionName = "扣减授信")
-    public User test3(String name,Integer age){
+    @GetMapping("decrease")
+    @LogInfo(companyName = "兰亮网络科技",projectName = "新金融",moduleName = "授信模块",functionName = "扣减授信",remark = "用于借款时扣减授信")
+    public User decrease(String name,Integer age){
         String s = this.test0(name,age);
         LOGGER.info("test0调用结果为 = {}",s);
         return new User("张三",88);
