@@ -1,6 +1,5 @@
 package com.java4all.scalog.aspect;
 
-import com.fasterxml.jackson.annotation.ObjectIdGenerators.UUIDGenerator;
 import com.google.gson.Gson;
 import com.java4all.scalog.annotation.LogInfo;
 import com.java4all.scalog.utils.SourceUtil;
@@ -9,9 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadLocalRandom;
@@ -110,8 +107,7 @@ public class LogInfoAspect {
         }
         //use Gson can resolve the args contains File,FastJson is not support
         String result = new Gson().toJson(proceed);
-        long cost = endTime - startTime;
-        executor.execute(()-> this.writeLog(joinPoint, cost, result, request, clazz, method));
+        executor.execute(()-> this.writeLog(joinPoint, startTime,endTime, result, request, clazz, method));
         return proceed;
     }
 
@@ -119,13 +115,14 @@ public class LogInfoAspect {
      * write log
      *
      * @param joinPoint
-     * @param cost
+     * @param startTime
+     * @param endTime
      * @param result
      * @param request
      * @param clazz
      * @param method
      */
-    private void writeLog(ProceedingJoinPoint joinPoint, long cost, String result,
+    private void writeLog(ProceedingJoinPoint joinPoint, long startTime,long endTime, String result,
             HttpServletRequest request, Class<? extends MethodSignature> clazz, Method method) {
         String companyName = "";
         String projectName = "";
@@ -165,14 +162,14 @@ public class LogInfoAspect {
             ps.setString(10,requestParams);
             ps.setString(11,result);
             ps.setString(12,remark);
-            ps.setLong(13,cost);
+            ps.setLong(13,endTime - startTime);
             ps.setString(14,ip);
-            ps.setString(15,"userid");
-            ps.setString(16,"username");
+            ps.setString(15,null);
+            ps.setString(16,null);
             ps.setInt(17,1);
             //todo
-            ps.setDate(18,new Date(11111L));
-            ps.setDate(19,new Date(4444444L));
+            ps.setDate(18,new Date(startTime));
+            ps.setDate(19,new Date(endTime));
             ps.setDate(20,new Date(System.currentTimeMillis()));
             ps.setDate(21,new Date(System.currentTimeMillis()));
             ps.execute();
