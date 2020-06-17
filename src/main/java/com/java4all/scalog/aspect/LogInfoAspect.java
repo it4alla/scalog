@@ -1,5 +1,6 @@
 package com.java4all.scalog.aspect;
 
+import com.fasterxml.jackson.annotation.ObjectIdGenerators.UUIDGenerator;
 import com.google.gson.Gson;
 import com.java4all.scalog.annotation.LogInfo;
 import com.java4all.scalog.utils.SourceUtil;
@@ -9,8 +10,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy;
 import java.util.concurrent.TimeUnit;
@@ -108,8 +112,7 @@ public class LogInfoAspect {
         //use Gson can resolve the args contains File,FastJson is not support
         String result = new Gson().toJson(proceed);
         long cost = endTime - startTime;
-//        executor.execute(()-> this.writeLog(joinPoint, cost, result, request, clazz, method));
-        this.writeLog(joinPoint, cost, result, request, clazz, method);
+        executor.execute(()-> this.writeLog(joinPoint, cost, result, request, clazz, method));
         return proceed;
     }
 
@@ -206,16 +209,18 @@ public class LogInfoAspect {
 
     /**
      * generate id
+     * 9000 0000 every millisecond
      * @return
      */
     private static String generateId() {
-        String time = LocalDate.now().toString()
+        String time = LocalDateTime.now().toString()
                 .replace("-", "")
                 .replace("T", "")
                 .replace(":", "")
                 .replace(".", "");
-        String id = new StringBuffer().append(time).append(INIT.incrementAndGet()).toString();
-        return id;
+
+        return new StringBuffer().append(time).append(ThreadLocalRandom.current()
+                .nextLong(10000000,100000000)).toString();
     }
 
 }
