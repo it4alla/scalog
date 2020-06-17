@@ -40,11 +40,11 @@ public class LogInfoAspect {
 
 
     /**
-     * 拦截controller包下的所有类的所有方法，不包含子包中
+     * 拦截controller包下的所有类的所有方法，包含子包中
      * @TODO 路径读配置文件或者注解中的，支持自定义
      * pointCut表达式 https://www.cnblogs.com/itsoku123/p/10744244.html
      */
-    @Pointcut("execution(* com.java4all.scalog.controller.*.*(..))")
+    @Pointcut("execution(* com.java4all.scalog.controller..*.*(..))")
     public void pointCut(){}
 
     @Before("pointCut()")
