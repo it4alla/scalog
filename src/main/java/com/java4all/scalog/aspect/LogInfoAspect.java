@@ -3,6 +3,8 @@ package com.java4all.scalog.aspect;
 import com.google.gson.Gson;
 import com.java4all.scalog.annotation.LogInfo;
 import com.java4all.scalog.utils.SourceUtil;
+import com.runlion.security.server.entity.UserInfo;
+import com.runlion.security.server.util.UserInfoUtil;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -138,6 +140,14 @@ public class LogInfoAspect {
         String methodName = method.getName();
         String ip = request.getRemoteAddr();
         String requestParams = new Gson().toJson(joinPoint.getArgs());
+        String userId = "";
+
+        try {
+            UserInfo currentUser = UserInfoUtil.getCurrentUser(UserInfo.class);
+            userId = currentUser.getUserId();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
 
         Connection connection = null;
         try {
@@ -158,8 +168,8 @@ public class LogInfoAspect {
             ps.setString(12,remark);
             ps.setLong(13,endTime - startTime);
             ps.setString(14,ip);
-            ps.setString(15,null);
-            ps.setString(16,null);
+            ps.setString(15,userId);
+            ps.setString(16,userId);
             ps.setInt(17,1);
             ps.setString(18,FORMAT.format(new Date(startTime)));
             ps.setString(19,FORMAT.format(new Date(endTime)));
