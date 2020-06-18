@@ -7,7 +7,8 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Date;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
@@ -47,6 +48,7 @@ public class LogInfoAspect {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogInfoAspect.class);
     private static final String LOG_TABLE = "log_info";
+    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     private static final String INSERT_LOG_SQL =
             "insert into " + LOG_TABLE +
@@ -58,7 +60,7 @@ public class LogInfoAspect {
                     + "(?, ?, ?, ?, ?,"
                     + " ?, ?, ?, ?, ?,"
                     + " ?, ?, ?, ?, ?,"
-                    + " ?, ?, ?, ?, ?, ?)";
+                    + " ?, ?, ?, ?, now(), now())";
 
     private static ThreadPoolExecutor executor =
             new ThreadPoolExecutor(4,8,10,
@@ -89,7 +91,7 @@ public class LogInfoAspect {
         if(!clazz.isAnnotationPresent(Controller.class)
                 && !clazz.isAnnotationPresent(RestController.class)) {
             if(LOGGER.isDebugEnabled()) {
-                LOGGER.debug("{} not a web controller class,skip","待添加");
+                LOGGER.debug("{} not a web controller class,skip",clazz.toString());
             }
             return proceed;
         }
@@ -101,7 +103,7 @@ public class LogInfoAspect {
                 && !method.isAnnotationPresent(DeleteMapping.class)
                 && !method.isAnnotationPresent(PatchMapping.class)) {
             if(LOGGER.isDebugEnabled()) {
-                LOGGER.debug("{}.{} not a web controller method,skip","待添加","待添加");
+                LOGGER.debug("{}.{} not a web controller method,skip",clazz.toString(),method.getName());
             }
             return proceed;
         }
@@ -113,14 +115,6 @@ public class LogInfoAspect {
 
     /**
      * write log
-     *
-     * @param joinPoint
-     * @param startTime
-     * @param endTime
-     * @param result
-     * @param request
-     * @param clazz
-     * @param method
      */
     private void writeLog(ProceedingJoinPoint joinPoint, long startTime,long endTime, String result,
             HttpServletRequest request, Class<? extends MethodSignature> clazz, Method method) {
@@ -138,7 +132,7 @@ public class LogInfoAspect {
             remark = logInfo.remark();
         }
 
-        String url = request.getRequestURL().toString();
+        String url = request.getRequestURL() == null ? "" : request.getRequestURL().toString();
         String methodType = request.getMethod();
         String className = clazz.toString();
         String methodName = method.getName();
@@ -167,13 +161,11 @@ public class LogInfoAspect {
             ps.setString(15,null);
             ps.setString(16,null);
             ps.setInt(17,1);
-            //todo
-            ps.setDate(18,new Date(startTime));
-            ps.setDate(19,new Date(endTime));
-            ps.setDate(20,new Date(System.currentTimeMillis()));
-            ps.setDate(21,new Date(System.currentTimeMillis()));
+            ps.setString(18,FORMAT.format(new Date(startTime)));
+            ps.setString(19,FORMAT.format(new Date(endTime)));
             ps.execute();
         } catch (SQLException e) {
+            LOGGER.error("log info insert failed");
             e.printStackTrace();
         } finally {
           SourceUtil.close(connection);
