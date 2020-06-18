@@ -11,7 +11,7 @@
   </parent>
   <groupId>com.java4all</groupId>
   <artifactId>scalog</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0-RELEASE</version>
   <name>scalog</name>
   <description>Demo project for Spring Boot</description>
 
@@ -109,9 +109,9 @@
         <artifactId>maven-source-plugin</artifactId>
         <configuration>
           <attach>true</attach>
-          <excludes>
-            <exclude>/**.yml</exclude>
-          </excludes>
+<!--          <excludes>-->
+<!--            <exclude>/**.yml</exclude>-->
+<!--          </excludes>-->
         </configuration>
         <executions>
           <execution>
