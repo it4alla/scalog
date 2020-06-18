@@ -2,6 +2,62 @@ GET http://192.168.158.80:8888/user/decrease?name=刘树人&age=54
 Accept: */*
 Cache-Control: no-cache
 
+<> 2020-06-18T120007.200.json
+
+###
+
+GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-06-18T115955.200.json
+
+###
+
+GET http://192.168.158.80:8888/credit/decrease?name=刘树人&age=54
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-06-18T115948.200.json
+
+###
+
+GET http://192.168.158.80:8888/user/decrease?name=刘树人&age=54
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-06-18T115935.200.json
+
+###
+
+GET http://192.168.158.80:8888/user/decrease?name=刘树人&age=54
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-06-18T115805.200.json
+
+###
+
+GET http://192.168.158.80:8888/user/decrease?name=刘树人&age=54
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-06-18T115742.200.json
+
+###
+
+GET http://192.168.158.80:8888/user/decrease?name=刘树人&age=54
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-06-18T115605.200.json
+
+###
+
+GET http://192.168.158.80:8888/user/decrease?name=刘树人&age=54
+Accept: */*
+Cache-Control: no-cache
+
 <> 2020-06-18T103132.200.json
 
 ###
@@ -339,62 +395,6 @@ Accept: */*
 Cache-Control: no-cache
 
 <> 2020-06-18T101441-2.200.json
-
-###
-
-GET http://192.168.158.80:8888/user/decrease?name=刘树人&age=54
-Accept: */*
-Cache-Control: no-cache
-
-<> 2020-06-18T101441-1.200.json
-
-###
-
-GET http://192.168.158.80:8888/user/decrease?name=刘树人&age=54
-Accept: */*
-Cache-Control: no-cache
-
-<> 2020-06-18T101441.200.json
-
-###
-
-GET http://192.168.158.80:8888/user/decrease?name=刘树人&age=54
-Accept: */*
-Cache-Control: no-cache
-
-<> 2020-06-18T101440-6.200.json
-
-###
-
-GET http://192.168.158.80:8888/user/decrease?name=刘树人&age=54
-Accept: */*
-Cache-Control: no-cache
-
-<> 2020-06-18T101440-5.200.json
-
-###
-
-GET http://192.168.158.80:8888/user/decrease?name=刘树人&age=54
-Accept: */*
-Cache-Control: no-cache
-
-<> 2020-06-18T101440-4.200.json
-
-###
-
-GET http://192.168.158.80:8888/user/decrease?name=刘树人&age=54
-Accept: */*
-Cache-Control: no-cache
-
-<> 2020-06-18T101440-3.200.json
-
-###
-
-GET http://192.168.158.80:8888/user/decrease?name=刘树人&age=54
-Accept: */*
-Cache-Control: no-cache
-
-<> 2020-06-18T101440-2.200.json
 
 ###
 

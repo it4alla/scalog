@@ -53,10 +53,10 @@
       <version>1.5.1-RELEASE</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.springframework.boot</groupId>-->
+<!--      <artifactId>spring-boot-starter-web</artifactId>-->
+<!--    </dependency>-->
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -109,6 +109,9 @@
         <artifactId>maven-source-plugin</artifactId>
         <configuration>
           <attach>true</attach>
+          <excludes>
+            <exclude>/**.yml</exclude>
+          </excludes>
         </configuration>
         <executions>
           <execution>
