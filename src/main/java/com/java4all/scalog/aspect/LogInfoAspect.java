@@ -142,12 +142,12 @@ public class LogInfoAspect {
         String requestParams = new Gson().toJson(joinPoint.getArgs());
         String userId = "";
 
-        try {
-            UserInfo currentUser = UserInfoUtil.getCurrentUser(UserInfo.class);
-            userId = currentUser.getUserId();
-        }catch (Exception ex){
-            ex.printStackTrace();
-        }
+//        try {
+//            UserInfo currentUser = UserInfoUtil.getCurrentUser(UserInfo.class);
+//            userId = currentUser.getUserId();
+//        }catch (Exception ex){
+//            ex.printStackTrace();
+//        }
 
         Connection connection = null;
         try {
