@@ -3,8 +3,6 @@ package com.java4all.scalog.aspect;
 import com.google.gson.Gson;
 import com.java4all.scalog.annotation.LogInfo;
 import com.java4all.scalog.utils.SourceUtil;
-import com.runlion.security.server.entity.UserInfo;
-import com.runlion.security.server.util.UserInfoUtil;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
