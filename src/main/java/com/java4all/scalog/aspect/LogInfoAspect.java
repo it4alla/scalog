@@ -18,6 +18,7 @@ import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -25,6 +26,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,9 +40,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
- * LogInfo Aspect
+ * @decription LogInfo Aspect
  * @author wangzhongxiang
- * @date 2020年06月15日 10:01:24
  */
 @Aspect
 @Component
@@ -64,14 +65,20 @@ public class LogInfoAspect {
 
     private static ThreadPoolExecutor executor =
             new ThreadPoolExecutor(4,8,10,
-            TimeUnit.SECONDS,new LinkedBlockingQueue<>(10000),
+            TimeUnit.SECONDS,new LinkedBlockingQueue<>(100000),
             new NameThreadFactory(),new CallerRunsPolicy());
+
+    /**
+     * the dataSource from the application context
+     */
+    @Autowired
+    private DataSource dataSource;
 
     /**
      * *.controller
      * include subclass package
      */
-    @Pointcut("execution(* com.*..*.controller..*.*(..))")
+    @Pointcut("execution(* com..controller..*.*(..))")
     public void pointCut(){}
 
     @Around("pointCut()")
@@ -149,7 +156,7 @@ public class LogInfoAspect {
 
         Connection connection = null;
         try {
-            connection = SourceUtil.getConnection();
+            connection = dataSource.getConnection();
             connection.setAutoCommit(true);
             PreparedStatement ps = connection.prepareStatement(INSERT_LOG_SQL);
             ps.setString(1,generateId());
@@ -195,7 +202,7 @@ public class LogInfoAspect {
 
         @Override
         public Thread newThread(Runnable r) {
-            Thread thread = new Thread(group, r, "Thread-LogInfo-" + index.getAndIncrement());
+            Thread thread = new Thread(group, r, "Java4all-Thread-LogInfo-" + index.getAndIncrement());
             thread.setDaemon(true);
             if (thread.getPriority() != Thread.NORM_PRIORITY) {
                 thread.setPriority(Thread.NORM_PRIORITY);
