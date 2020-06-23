@@ -18,7 +18,16 @@
   <properties>
     <java.version>1.8</java.version>
   </properties>
-
+  <developers>
+    <developer>
+      <name>IT云清</name>
+      <email>1186355422@qq.com</email>
+    </developer>
+  </developers>
+  <organization>
+    <name>scalog</name>
+    <url>https://github.com/lightClouds917/scalog</url>
+  </organization>
   <dependencies>
 
     <!--  aop  -->
