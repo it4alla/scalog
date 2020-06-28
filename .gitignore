@@ -32,3 +32,14 @@ hs_err_pid*
 *.ipr
 *.iml
 *.iws
+
+# maven ignore
+target/
+*.jar
+*.war
+*.zip
+*.tar
+*.tar.gz
+*.class
+.flattened-pom.xml
+dependency-reduced-pom.xml
