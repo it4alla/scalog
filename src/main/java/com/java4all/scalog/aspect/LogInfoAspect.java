@@ -9,8 +9,10 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
@@ -51,7 +53,7 @@ public class LogInfoAspect {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogInfoAspect.class);
     private static final String LOG_TABLE = "log_info";
-    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
 
     private static final String INSERT_LOG_SQL =
             "insert into " + LOG_TABLE +
@@ -142,6 +144,7 @@ public class LogInfoAspect {
         }
 
         String url = request.getRequestURL() == null ? "" : request.getRequestURL().toString();
+        request.getRequestURI()
         String methodType = request.getMethod();
         String className = clazz.toString();
         String methodName = method.getName();
@@ -178,8 +181,10 @@ public class LogInfoAspect {
             ps.setString(15,userId);
             ps.setString(16,userId);
             ps.setInt(17,1);
-            ps.setString(18,FORMAT.format(new Date(startTime)));
-            ps.setString(19,FORMAT.format(new Date(endTime)));
+            ps.setString(18,FORMAT
+                    .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(startTime), ZoneId.systemDefault())));
+            ps.setString(19,FORMAT
+                    .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(endTime), ZoneId.systemDefault())));
             ps.execute();
         } catch (SQLException e) {
             LOGGER.error("log info insert failed,{}",e.getMessage(),e);
