@@ -3,6 +3,8 @@ package com.java4all.scalog.aspect;
 import com.google.gson.Gson;
 import com.java4all.scalog.annotation.LogInfo;
 import com.java4all.scalog.utils.SourceUtil;
+import com.runlion.security.server.entity.UserInfo;
+import com.runlion.security.server.util.UserInfoUtil;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -147,12 +149,12 @@ public class LogInfoAspect {
         String requestParams = new Gson().toJson(joinPoint.getArgs());
         String userId = "";
 
-//        try {
-//            UserInfo currentUser = UserInfoUtil.getCurrentUser(UserInfo.class);
-//            userId = currentUser.getUserId();
-//        }catch (Exception ex){
-//            ex.printStackTrace();
-//        }
+        try {
+            UserInfo currentUser = UserInfoUtil.getCurrentUser(UserInfo.class);
+            userId = currentUser.getUserId();
+        }catch (Exception ex){
+            LOGGER.warn("Get current user failed,But it does not affect business logic,{}",ex.getMessage(),ex);
+        }
 
         Connection connection = null;
         try {
@@ -180,8 +182,7 @@ public class LogInfoAspect {
             ps.setString(19,FORMAT.format(new Date(endTime)));
             ps.execute();
         } catch (SQLException e) {
-            LOGGER.error("log info insert failed");
-            e.printStackTrace();
+            LOGGER.error("log info insert failed,{}",e.getMessage(),e);
         } finally {
           SourceUtil.close(connection);
         }
