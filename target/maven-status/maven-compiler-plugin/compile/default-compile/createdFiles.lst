@@ -1,0 +1,5 @@
+com\java4all\scalog\aspect\LogInfoAspect.class
+com\java4all\scalog\aspect\LogInfoAspect$NameThreadFactory.class
+com\java4all\scalog\ScalogApplication.class
+com\java4all\scalog\annotation\LogInfo.class
+com\java4all\scalog\utils\SourceUtil.class
