@@ -1,28 +1,26 @@
 package com.java4all.scalog.aspect;
 
 import com.google.gson.Gson;
+import com.java4all.scalog.annotation.LoadLevel;
 import com.java4all.scalog.annotation.LogInfo;
-import com.java4all.scalog.utils.SourceUtil;
+import com.java4all.scalog.store.executor.BaseSqlExecutor;
+import com.java4all.scalog.store.ConstantProperties;
+import com.java4all.scalog.store.LogInfoDto;
 import com.runlion.security.server.entity.UserInfo;
 import com.runlion.security.server.util.UserInfoUtil;
 import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.time.LocalDateTime;
+import java.util.ServiceLoader;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
-import javax.sql.DataSource;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -30,9 +28,11 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -49,34 +49,18 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 @Aspect
 @Component
-public class LogInfoAspect {
+public class LogInfoAspect implements InitializingBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogInfoAspect.class);
-    private static final String LOG_TABLE = "log_info";
+    private static final String DEFAULT_DB_TYPE = "mysql";
     private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
-
-    private static final String INSERT_LOG_SQL =
-            "insert into " + LOG_TABLE +
-                    "(`id`, `company_name`, `project_name`, `module_name`, `function_name`, "
-                    + "`class_name`, `method_name`, `method_type`, `url`, `request_params`,"
-                    + "`result`, `remark`, `cost`, `ip`, `user_id`, "
-                    + "`user_Name`, `log_type`,`gmt_start`, `gmt_end`,`gmt_create`, `gmt_modified`)"
-                    + " values "
-                    + "(?, ?, ?, ?, ?,"
-                    + " ?, ?, ?, ?, ?,"
-                    + " ?, ?, ?, ?, ?,"
-                    + " ?, ?, ?, ?, now(), now())";
-
     private static ThreadPoolExecutor executor =
-            new ThreadPoolExecutor(4,8,10,
+            new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),8,10,
             TimeUnit.SECONDS,new LinkedBlockingQueue<>(100000),
             new NameThreadFactory(),new CallerRunsPolicy());
-
-    /**
-     * the dataSource from the application context
-     */
     @Autowired
-    private DataSource dataSource;
+    private ConstantProperties properties;
+    private BaseSqlExecutor sqlExecutor;
 
     /**
      * *.controller
@@ -120,7 +104,15 @@ public class LogInfoAspect {
         }
         //use Gson can resolve the args contains File,FastJson is not support
         String result = new Gson().toJson(proceed);
-        executor.execute(()-> this.writeLog(joinPoint, startTime,endTime, result, request, clazz, method));
+
+        executor.execute(()-> {
+            try {
+                this.writeLog(joinPoint, startTime,endTime, result, request, clazz, method);
+            } catch (Exception e) {
+                LOGGER.warn("{}.{} log info write failed,But it does not affect business logic:{}",
+                        clazz.toString(),method.getName(),e.getMessage(),e);
+            }
+        });
         return proceed;
     }
 
@@ -128,68 +120,51 @@ public class LogInfoAspect {
      * write log
      */
     private void writeLog(ProceedingJoinPoint joinPoint, long startTime,long endTime, String result,
-            HttpServletRequest request, Class<? extends MethodSignature> clazz, Method method) {
-        String companyName = "";
-        String projectName = "";
-        String moduleName = "";
-        String functionName = "";
-        String remark = "";
+            HttpServletRequest request, Class<? extends MethodSignature> clazz, Method method) throws Exception{
+        LogInfoDto dto = new LogInfoDto();
+
         if(method.isAnnotationPresent(LogInfo.class)) {
             LogInfo logInfo = method.getAnnotation(LogInfo.class);
-            companyName = logInfo.companyName();
-            projectName = logInfo.projectName();
-            moduleName = logInfo.moduleName();
-            functionName = logInfo.functionName();
-            remark = logInfo.remark();
+            dto.setCompanyName(logInfo.companyName());
+            dto.setProjectName(logInfo.projectName());
+            dto.setModuleName(logInfo.moduleName());
+            dto.setFunctionName(logInfo.functionName());
+            dto.setRemark(logInfo.remark());
         }
-
-        String url = request.getRequestURL() == null ? "" : request.getRequestURL().toString();
-        request.getRequestURI()
-        String methodType = request.getMethod();
-        String className = clazz.toString();
-        String methodName = method.getName();
-        String ip = request.getRemoteAddr();
-        String requestParams = new Gson().toJson(joinPoint.getArgs());
         String userId = "";
-
         try {
             UserInfo currentUser = UserInfoUtil.getCurrentUser(UserInfo.class);
             userId = currentUser.getUserId();
         }catch (Exception ex){
             LOGGER.warn("Get current user failed,But it does not affect business logic,{}",ex.getMessage(),ex);
         }
+        String url = request.getRequestURL() == null ? "" : request.getRequestURL().toString();
+        dto.setUrl(url);
+        dto.setMethodType(request.getMethod());
+        dto.setClassName(clazz.toString());
+        dto.setMethodName(method.getName());
+        dto.setIp(request.getRemoteAddr());
+        dto.setRequestParams(new Gson().toJson(joinPoint.getArgs()));
+        dto.setUserId(userId);
+        dto.setCost(endTime-startTime);
+        dto.setResult(result);
+        dto.setGmtStart(FORMAT
+                .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(startTime), ZoneId.systemDefault())));
+        dto.setGmtEnd(FORMAT
+                .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(endTime), ZoneId.systemDefault())));
+        sqlExecutor.insert(dto);
+    }
 
-        Connection connection = null;
-        try {
-            connection = dataSource.getConnection();
-            connection.setAutoCommit(true);
-            PreparedStatement ps = connection.prepareStatement(INSERT_LOG_SQL);
-            ps.setString(1,generateId());
-            ps.setString(2,companyName);
-            ps.setString(3,projectName);
-            ps.setString(4,moduleName);
-            ps.setString(5,functionName);
-            ps.setString(6,className);
-            ps.setString(7,methodName);
-            ps.setString(8,methodType);
-            ps.setString(9,url);
-            ps.setString(10,requestParams);
-            ps.setString(11,result);
-            ps.setString(12,remark);
-            ps.setLong(13,endTime - startTime);
-            ps.setString(14,ip);
-            ps.setString(15,userId);
-            ps.setString(16,userId);
-            ps.setInt(17,1);
-            ps.setString(18,FORMAT
-                    .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(startTime), ZoneId.systemDefault())));
-            ps.setString(19,FORMAT
-                    .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(endTime), ZoneId.systemDefault())));
-            ps.execute();
-        } catch (SQLException e) {
-            LOGGER.error("log info insert failed,{}",e.getMessage(),e);
-        } finally {
-          SourceUtil.close(connection);
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        String dbType = StringUtils.isEmpty(properties.getDbType()) ? DEFAULT_DB_TYPE : properties.getDbType();
+        ServiceLoader<BaseSqlExecutor> sqlExecutors = ServiceLoader.load(BaseSqlExecutor.class);
+        for (BaseSqlExecutor sqlExecutor : sqlExecutors){
+            LoadLevel loadLevel = sqlExecutor.getClass().getAnnotation(LoadLevel.class);
+            if(loadLevel != null && dbType.equalsIgnoreCase(loadLevel.name())){
+                sqlExecutor = sqlExecutor.getClass().newInstance();
+                LOGGER.info("load sqlExecutor [{}] ......",sqlExecutor.getClass().getName());
+            }
         }
     }
 
@@ -217,20 +192,6 @@ public class LogInfoAspect {
         }
     }
 
-    /**
-     * generate id
-     * 9000 0000 every millisecond
-     * @return
-     */
-    private static String generateId() {
-        String time = LocalDateTime.now().toString()
-                .replace("-", "")
-                .replace("T", "")
-                .replace(":", "")
-                .replace(".", "");
 
-        return new StringBuffer().append(time).append(ThreadLocalRandom.current()
-                .nextLong(10000000,100000000)).toString();
-    }
 
 }
