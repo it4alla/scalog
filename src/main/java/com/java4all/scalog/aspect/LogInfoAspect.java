@@ -144,7 +144,6 @@ public class LogInfoAspect {
         }
 
         String url = request.getRequestURL() == null ? "" : request.getRequestURL().toString();
-        request.getRequestURI()
         String methodType = request.getMethod();
         String className = clazz.toString();
         String methodName = method.getName();
