@@ -3,8 +3,8 @@ package com.java4all.scalog.aspect;
 import com.google.gson.Gson;
 import com.java4all.scalog.annotation.LoadLevel;
 import com.java4all.scalog.annotation.LogInfo;
+import com.java4all.scalog.properties.ScalogProperties;
 import com.java4all.scalog.store.executor.BaseSqlExecutor;
-import com.java4all.scalog.store.ConstantProperties;
 import com.java4all.scalog.store.LogInfoDto;
 import com.runlion.security.server.entity.UserInfo;
 import com.runlion.security.server.util.UserInfoUtil;
@@ -59,7 +59,7 @@ public class LogInfoAspect implements InitializingBean {
             TimeUnit.SECONDS,new LinkedBlockingQueue<>(100000),
             new NameThreadFactory(),new CallerRunsPolicy());
     @Autowired
-    private ConstantProperties properties;
+    private ScalogProperties properties;
     private BaseSqlExecutor sqlExecutor;
 
     /**
