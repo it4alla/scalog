@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ScalogProperties {
 
-    @Value("${com.java4all.scalog.db.type}")
+    @Value("${scalog.db.type}")
     private String dbType;
 
     public String getDbType() {
