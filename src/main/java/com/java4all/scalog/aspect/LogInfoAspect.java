@@ -146,6 +146,8 @@ public class LogInfoAspect implements InitializingBean {
         dto.setIp(request.getRemoteAddr());
         dto.setRequestParams(new Gson().toJson(joinPoint.getArgs()));
         dto.setUserId(userId);
+        dto.setUserAgent(request.getHeader("User-Agent"));
+        dto.setClientType(request.getHeader("Client-Type"));
         dto.setCost(endTime-startTime);
         dto.setResult(result);
         dto.setGmtStart(FORMAT
@@ -158,6 +160,7 @@ public class LogInfoAspect implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         String dbType = StringUtils.isEmpty(properties.getDbType()) ? DEFAULT_DB_TYPE : properties.getDbType();
+        LOGGER.info("scalog db type is [{}]",dbType);
         ServiceLoader<BaseSqlExecutor> sqlExecutors = ServiceLoader.load(BaseSqlExecutor.class);
         for (BaseSqlExecutor sqlExecutor : sqlExecutors){
             LoadLevel loadLevel = sqlExecutor.getClass().getAnnotation(LoadLevel.class);

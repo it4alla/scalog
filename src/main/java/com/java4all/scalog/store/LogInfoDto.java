@@ -36,6 +36,10 @@ public class LogInfoDto {
     private String userId;
     /**用户名称*/
     private String userName;
+    /**客户端类型*/
+    private String clientType;
+    /**客户端信息*/
+    private String userAgent;
     /**此条操作状态：0 正常  1 异常'*/
     private Integer logType;
     /**操作开始时间*/
@@ -213,5 +217,22 @@ public class LogInfoDto {
 
     public void setGmtModified(String gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    public String getClientType() {
+        return clientType;
+    }
+
+    public void setClientType(String clientType) {
+        this.clientType = clientType;
+    }
+
+
+    public String getUserAgent() {
+        return userAgent;
+    }
+
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
     }
 }

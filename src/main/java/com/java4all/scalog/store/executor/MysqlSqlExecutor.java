@@ -55,7 +55,7 @@ public class MysqlSqlExecutor implements BaseSqlExecutor {
             ps.setString(19,dto.getGmtEnd());
             ps.execute();
         } catch (SQLException e) {
-            LOGGER.error("log info insert failed,{}",e.getMessage(),e);
+            LOGGER.error("log info insert failed,But it does not affect business logic:{}",e.getMessage(),e);
         } finally {
             SourceUtil.close(connection);
         }
