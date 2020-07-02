@@ -1,12 +1,12 @@
 package com.java4all.scalog.store;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 
 /**
  * @author wangzhongxiang
  */
-@ComponentScan
+@Component
 public class ConstantProperties {
 
     @Value("${com.java4all.scalog.dbType}")
