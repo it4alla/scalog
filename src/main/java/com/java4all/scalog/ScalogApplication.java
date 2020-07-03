@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * @author wangzhongxiang
- * @date 2020年06月14日 11:41:48
  */
 @SpringBootApplication
 public class ScalogApplication {
