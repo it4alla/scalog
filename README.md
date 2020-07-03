@@ -28,7 +28,16 @@ scalog的实现也是基于切面和注解，但是可以打包为jar的形式�
 @ComponentScan({"com.runlion.fsp","com.java4all"})
 ```
 
-#### 2.4使用
+#### 2.5配置文件
+提供配置项如下：
+- scalog.db.type 日志存储的数据库，支持 mysql , (oracle , elasticsearch , mongodb待实现)
+- scalog.level 日志的记录级别，支持 no , specified , all
+
+no：关闭日志记录，切面不记录任何日志
+specified：仅添加LogInfo注解的接口才会记录
+all：记录所有的接口
+
+#### 2.5使用
 上述步骤完成后，接口请求记录已经可以正常记录。
 但是，以下几个字段，是可选项，切面无法拿到，默认为空：
 ```java
@@ -76,7 +85,9 @@ CREATE TABLE `log_info` (
   `cost` bigint(50) DEFAULT NULL COMMENT '接口耗时',
   `ip` char(200) DEFAULT NULL COMMENT '用户ip',
   `user_id` char(200) DEFAULT NULL COMMENT '用户id',
-  `user_Name` char(200) DEFAULT NULL COMMENT '用户名称',
+  `user_name` char(200) DEFAULT NULL COMMENT '用户名称',
+  `client_type` varchar(200) DEFAULT NULL COMMENT '客户端类型',
+  `user_agent` varchar(200) DEFAULT NULL COMMENT '客户端信息',
   `log_type` tinyint(1) DEFAULT NULL COMMENT '此条操作状态：0 正常  1 异常',
   `gmt_start` datetime DEFAULT NULL COMMENT '操作开始时间',
   `gmt_end` datetime DEFAULT NULL COMMENT '操作结束时间',
@@ -84,5 +95,7 @@ CREATE TABLE `log_info` (
   `gmt_modified` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='接口日志记录表';
+
+
 
 ```

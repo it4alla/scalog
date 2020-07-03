@@ -14,10 +14,11 @@ public class MysqlSql {
                     "(`id`, `company_name`, `project_name`, `module_name`, `function_name`, "
                     + "`class_name`, `method_name`, `method_type`, `url`, `request_params`,"
                     + "`result`, `remark`, `cost`, `ip`, `user_id`, "
-                    + "`user_name`, `log_type`,`gmt_start`, `gmt_end`,`gmt_create`, `gmt_modified`)"
+                    + "`user_name`, `client_type`, `user_agent`, `log_type`,"
+                    + "`gmt_start`, `gmt_end`,`gmt_create`, `gmt_modified`)"
                     + " values "
                     + "(?, ?, ?, ?, ?,"
                     + " ?, ?, ?, ?, ?,"
                     + " ?, ?, ?, ?, ?,"
-                    + " ?, ?, ?, ?, now(), now())";
+                    + " ?, ?, ?, ?, ?, ?, now(), now())";
 }
