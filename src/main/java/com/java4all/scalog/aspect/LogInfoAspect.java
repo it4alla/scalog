@@ -53,6 +53,11 @@ public class LogInfoAspect implements InitializingBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogInfoAspect.class);
     private static final String DEFAULT_DB_TYPE = "mysql";
+    private static final String LEVEL_NO = "no";
+    private static final String LEVEL_ALL = "all";
+    private static final String LEVEL_SPECIFIED = "specified";
+    private static final String DEFAULT_LEVEL = LEVEL_ALL;
+
     private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
     private static ThreadPoolExecutor executor =
             new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),8,10,
@@ -102,12 +107,21 @@ public class LogInfoAspect implements InitializingBean {
             }
             return proceed;
         }
+
+        String level = properties.getLevel();
+        if(StringUtils.isEmpty(level)){
+            level  = DEFAULT_LEVEL;
+        }
+        if(LEVEL_NO.equalsIgnoreCase(level)){
+            return proceed;
+        }
+        final String activeLevel = level;
+
         //use Gson can resolve the args contains File,FastJson is not support
         String result = new Gson().toJson(proceed);
-
         executor.execute(()-> {
             try {
-                this.writeLog(joinPoint, startTime,endTime, result, request, clazz, method);
+                this.writeLog(joinPoint, startTime,endTime, result, request, clazz, method, activeLevel);
             } catch (Exception e) {
                 LOGGER.warn("{}.{} log info write failed,But it does not affect business logic:{}",
                         clazz.toString(),method.getName(),e.getMessage(),e);
@@ -120,17 +134,21 @@ public class LogInfoAspect implements InitializingBean {
      * write log
      */
     private void writeLog(ProceedingJoinPoint joinPoint, long startTime,long endTime, String result,
-            HttpServletRequest request, Class<? extends MethodSignature> clazz, Method method) throws Exception{
-        LogInfoDto dto = new LogInfoDto();
-
-        if(method.isAnnotationPresent(LogInfo.class)) {
-            LogInfo logInfo = method.getAnnotation(LogInfo.class);
-            dto.setCompanyName(logInfo.companyName());
-            dto.setProjectName(logInfo.projectName());
-            dto.setModuleName(logInfo.moduleName());
-            dto.setFunctionName(logInfo.functionName());
-            dto.setRemark(logInfo.remark());
+            HttpServletRequest request, Class<? extends MethodSignature> clazz, Method method,String activeLevel) throws Exception{
+        final boolean annotationPresent = method.isAnnotationPresent(LogInfo.class);
+        if(LEVEL_SPECIFIED.equalsIgnoreCase(activeLevel)){
+            if(!annotationPresent){
+                return;
+            }
         }
+
+        LogInfoDto dto = new LogInfoDto();
+        LogInfo logInfo = method.getAnnotation(LogInfo.class);
+        dto.setCompanyName(logInfo.companyName());
+        dto.setProjectName(logInfo.projectName());
+        dto.setModuleName(logInfo.moduleName());
+        dto.setFunctionName(logInfo.functionName());
+        dto.setRemark(logInfo.remark());
         String userId = "";
         try {
             UserInfo currentUser = UserInfoUtil.getCurrentUser(UserInfo.class);
