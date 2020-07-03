@@ -1,31 +1,20 @@
 package com.java4all.scalog.utils;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import javax.sql.DataSource;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import java.time.LocalDateTime;
+import java.util.concurrent.ThreadLocalRandom;
 import org.springframework.stereotype.Component;
 
 /**
+ * @decription Source Util
  * @author wangzhongxiang
- * @date 2020年06月17日 15:27:27
  */
 @Component
-public class SourceUtil implements ApplicationContextAware {
+public class SourceUtil {
 
-    @Autowired
-    private static DataSource dataSource;
-    private static ApplicationContext applicationContext;
-
-    public static Connection getConnection() throws SQLException {
-        dataSource = applicationContext.getBean(DataSource.class);
-        Connection connection = dataSource.getConnection();
-        return connection;
-    }
-
+    /**
+     * close source
+     * @param sources
+     */
     public static void close(AutoCloseable...sources){
         if(sources != null && sources.length > 0){
             for (AutoCloseable source:sources){
@@ -37,12 +26,22 @@ public class SourceUtil implements ApplicationContextAware {
                     }
                 }
             }
-
         }
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        SourceUtil.applicationContext = applicationContext;
+    /**
+     * generate id
+     * 9000 0000 every millisecond
+     * @return
+     */
+    public static String generateId() {
+        String time = LocalDateTime.now().toString()
+                .replace("-", "")
+                .replace("T", "")
+                .replace(":", "")
+                .replace(".", "");
+
+        return new StringBuffer().append(time).append(ThreadLocalRandom.current()
+                .nextLong(10000000,100000000)).toString();
     }
 }
