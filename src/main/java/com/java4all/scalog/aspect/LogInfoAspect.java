@@ -185,10 +185,10 @@ public class LogInfoAspect implements InitializingBean {
         String dbType = StringUtils.isEmpty(properties.getDb()) ? DEFAULT_DB_TYPE : properties.getDb();
         LOGGER.info("scalog db type is [{}]",dbType);
         ServiceLoader<BaseSqlExecutor> sqlExecutors = ServiceLoader.load(BaseSqlExecutor.class);
-        for (BaseSqlExecutor sqlExecutor : sqlExecutors){
-            LoadLevel loadLevel = sqlExecutor.getClass().getAnnotation(LoadLevel.class);
+        for (BaseSqlExecutor executor : sqlExecutors){
+            LoadLevel loadLevel = executor.getClass().getAnnotation(LoadLevel.class);
             if(loadLevel != null && dbType.equalsIgnoreCase(loadLevel.name())){
-                sqlExecutor = sqlExecutor.getClass().newInstance();
+                sqlExecutor = executor.getClass().newInstance();
                 LOGGER.info("load sqlExecutor [{}] ......",sqlExecutor.getClass().getName());
             }
         }
