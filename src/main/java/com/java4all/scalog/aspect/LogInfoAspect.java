@@ -117,11 +117,15 @@ public class LogInfoAspect implements InitializingBean {
         }
         final String activeLevel = level;
 
+        String companyName = properties.getCompanyName();
+        String projectName = properties.getProjectName();
+
         //use Gson can resolve the args contains File,FastJson is not support
         String result = new Gson().toJson(proceed);
         executor.execute(()-> {
             try {
-                this.writeLog(joinPoint, startTime,endTime, result, request, clazz, method, activeLevel);
+                //TODO fix the sub thread lose the request attributes
+                this.writeLog(joinPoint, startTime,endTime, result, request, clazz, method, activeLevel,companyName,projectName);
             } catch (Exception e) {
                 LOGGER.warn("{}.{} log info write failed,But it does not affect business logic:{}",
                         clazz.toString(),method.getName(),e.getMessage(),e);
@@ -134,7 +138,8 @@ public class LogInfoAspect implements InitializingBean {
      * write log
      */
     private void writeLog(ProceedingJoinPoint joinPoint, long startTime,long endTime, String result,
-            HttpServletRequest request, Class<? extends MethodSignature> clazz, Method method,String activeLevel) throws Exception{
+            HttpServletRequest request, Class<? extends MethodSignature> clazz, Method method,String activeLevel,
+            String companyName,String projectName) throws Exception{
         final boolean annotationPresent = method.isAnnotationPresent(LogInfo.class);
         if(LEVEL_SPECIFIED.equalsIgnoreCase(activeLevel)){
             if(!annotationPresent){
@@ -144,8 +149,8 @@ public class LogInfoAspect implements InitializingBean {
 
         LogInfoDto dto = new LogInfoDto();
         LogInfo logInfo = method.getAnnotation(LogInfo.class);
-        dto.setCompanyName(logInfo.companyName());
-        dto.setProjectName(logInfo.projectName());
+        dto.setCompanyName(companyName);
+        dto.setProjectName(projectName);
         dto.setModuleName(logInfo.moduleName());
         dto.setFunctionName(logInfo.functionName());
         dto.setRemark(logInfo.remark());
@@ -177,7 +182,7 @@ public class LogInfoAspect implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        String dbType = StringUtils.isEmpty(properties.getDbType()) ? DEFAULT_DB_TYPE : properties.getDbType();
+        String dbType = StringUtils.isEmpty(properties.getDb()) ? DEFAULT_DB_TYPE : properties.getDb();
         LOGGER.info("scalog db type is [{}]",dbType);
         ServiceLoader<BaseSqlExecutor> sqlExecutors = ServiceLoader.load(BaseSqlExecutor.class);
         for (BaseSqlExecutor sqlExecutor : sqlExecutors){

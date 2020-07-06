@@ -21,6 +21,9 @@ public class MysqlSqlExecutor implements BaseSqlExecutor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MysqlSqlExecutor.class);
 
+    public MysqlSqlExecutor() {
+    }
+
     /**
      * the dataSource from the application context
      */
@@ -50,9 +53,11 @@ public class MysqlSqlExecutor implements BaseSqlExecutor {
             ps.setString(14,dto.getIp());
             ps.setString(15,dto.getUserId());
             ps.setString(16,dto.getUserId());
-            ps.setInt(17,1);
-            ps.setString(18,dto.getGmtStart());
-            ps.setString(19,dto.getGmtEnd());
+            ps.setString(17,dto.getClientType());
+            ps.setString(18,dto.getUserAgent());
+            ps.setInt(19,1);
+            ps.setString(20,dto.getGmtStart());
+            ps.setString(21,dto.getGmtEnd());
             ps.execute();
         } catch (SQLException e) {
             LOGGER.error("log info insert failed,But it does not affect business logic:{}",e.getMessage(),e);

@@ -16,12 +16,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LogInfo {
 
-    /**公司*/
-    String companyName() default "";
-
-    /**项目*/
-    String projectName() default "";
-
     /**模块*/
     String moduleName() default "";
 

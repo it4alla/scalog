@@ -10,6 +10,9 @@ import com.java4all.scalog.store.LogInfoDto;
 @LoadLevel(name = "oracle")
 public class OracleSqlExecutor implements BaseSqlExecutor{
 
+    public OracleSqlExecutor() {
+    }
+
     /**
      * insert
      */

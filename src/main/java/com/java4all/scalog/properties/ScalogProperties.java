@@ -1,20 +1,20 @@
 package com.java4all.scalog.properties;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
  * @author wangzhongxiang
  */
 @Component
+@ConfigurationProperties(prefix = "scalog")
 public class ScalogProperties {
 
     /**
      * the scalog db type:
      * mysql , oracle , elasticsearch , mongodb
      */
-    @Value("${scalog.db.type}")
-    private String dbType;
+    private String db;
 
     /**
      * the scalog level:
@@ -25,15 +25,20 @@ public class ScalogProperties {
      * all: will record all of the controller's interface
      *
      */
-    @Value(("${scalog.level}"))
     private String level;
 
-    public String getDbType() {
-        return dbType;
+    /**company name*/
+    private String companyName;
+
+    /**project name*/
+    private String projectName;
+
+    public String getDb() {
+        return db;
     }
 
-    public void setDbType(String dbType) {
-        this.dbType = dbType;
+    public void setDb(String db) {
+        this.db = db;
     }
 
     public String getLevel() {
@@ -42,5 +47,21 @@ public class ScalogProperties {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 }
