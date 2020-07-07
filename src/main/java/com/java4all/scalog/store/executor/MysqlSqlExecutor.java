@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Mysql Executor
@@ -24,17 +23,13 @@ public class MysqlSqlExecutor implements BaseSqlExecutor {
     public MysqlSqlExecutor() {
     }
 
-    /**
-     * the dataSource from the application context
-     */
-    @Autowired
-    private DataSource dataSource;
 
     @Override
-    public void insert(LogInfoDto dto) {
+    public void insert(LogInfoDto dto,Object dataSource) {
+        DataSource source = (DataSource)dataSource;
         Connection connection = null;
         try {
-            connection = dataSource.getConnection();
+            connection = source.getConnection();
             connection.setAutoCommit(true);
             PreparedStatement ps = connection.prepareStatement(MysqlSql.INSERT_LOG_SQL);
             ps.setString(1,SourceUtil.generateId());

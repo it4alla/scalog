@@ -21,6 +21,7 @@ import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -66,6 +67,11 @@ public class LogInfoAspect implements InitializingBean {
     @Autowired
     private ScalogProperties properties;
     private BaseSqlExecutor sqlExecutor;
+    /**
+     * the dataSource from the application context
+     */
+    @Autowired
+    private DataSource dataSource;
 
     /**
      * *.controller
@@ -183,7 +189,7 @@ public class LogInfoAspect implements InitializingBean {
 
         //defensive try catch,althought it will not happen in normally
         try {
-            sqlExecutor.insert(dto);
+            sqlExecutor.insert(dto,dataSource);
         }catch (Exception ex){
             LOGGER.error("The sqlExecutor may be null,please check,{}",ex.getMessage(),ex);
         }
