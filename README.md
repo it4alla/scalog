@@ -1,6 +1,7 @@
-# scalog
+# scalog 
+### simple communal automatic log
 ### 1.背景
-记录项目中controller层接口的相关基础信息，方面后续做数据统计分析；
+记录项目中controller层接口的相关基础信息，方便后续做数据统计分析；
 目前项目中大多数方案是用切面或者拦截器配合注解来做，但是会存在一个问题：每个web项目都要单独实现或者copy一份此逻辑。
 scalog的实现也是基于切面和注解，但是可以打包为jar的形式，项目中直接引入pom依赖即可。
 
@@ -30,8 +31,10 @@ scalog的实现也是基于切面和注解，但是可以打包为jar的形式�
 
 #### 2.5配置文件
 提供配置项如下：
-- scalog.db.type 日志存储的数据库，支持 mysql , (oracle , elasticsearch , mongodb待实现)
-- scalog.level 日志的记录级别，支持 no , specified , all
+- scalog.db 日志存储的数据库，支持 mysql , (oracle , elasticsearch , mongodb待实现)
+- scalog.level 日志的记录级别，支持 no , specified , all 
+- scalog.companyName 企业名称
+- scalog.projectName 项目名称
 
 no：关闭日志记录，切面不记录任何日志
 specified：仅添加LogInfo注解的接口才会记录
@@ -40,17 +43,17 @@ all：记录所有的接口
 示例：
 ```java
 scalog:
-  db:
-    type: mysql
+  db: mysql
   level: all
+  companyName: 谷歌杭州分公司
+  projectName: 棱镜项目
+  
 ```
 
 #### 2.5使用
 上述步骤完成后，接口请求记录已经可以正常记录。
 但是，以下几个字段，是可选项，切面无法拿到，默认为空：
 ```java
-  `company_name` char(200) DEFAULT NULL COMMENT '公司名称',
-  `project_name` char(200) DEFAULT NULL COMMENT '项目名称',
   `module_name` char(200) DEFAULT NULL COMMENT '模块名称',
   `function_name` char(200) DEFAULT NULL COMMENT '功能名称',
   `remark` char(200) DEFAULT NULL COMMENT '备注',
@@ -64,7 +67,7 @@ scalog:
      * @param pageNum
      * @return
      */
-    @LogInfo(companyName = "谷歌杭州分公司",projectName = "金融项目",moduleName = "授信模块",functionName = "返利单价列表",remark = "获取返利单价列表")
+    @LogInfo(moduleName = "授信模块",functionName = "返利单价列表",remark = "获取返利单价列表")
     @GetMapping(value = "list")
     public ObjectRestResponse list(Integer pageSize,Integer pageNum){
         FspPageInfo fspPageInfo = rebateServiceImpl.list(pageSize,pageNum);
@@ -73,6 +76,7 @@ scalog:
 ```
 ### 3.用户
 由于不同项目中用户获取方式不一样，所以，userId,userName的处理，可能需要自行处理一下。
+（这块处理完善中。。。。。。）
 
 
 #### 数据库表结构：
@@ -103,7 +107,5 @@ CREATE TABLE `log_info` (
   `gmt_modified` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='接口日志记录表';
-
-
 
 ```
