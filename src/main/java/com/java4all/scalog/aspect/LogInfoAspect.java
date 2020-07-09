@@ -21,6 +21,7 @@ import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -66,6 +67,11 @@ public class LogInfoAspect implements InitializingBean {
     @Autowired
     private ScalogProperties properties;
     private BaseSqlExecutor sqlExecutor;
+    /**
+     * the dataSource from the application context
+     */
+    @Autowired
+    private DataSource dataSource;
 
     /**
      * *.controller
@@ -115,17 +121,28 @@ public class LogInfoAspect implements InitializingBean {
         if(LEVEL_NO.equalsIgnoreCase(level)){
             return proceed;
         }
-        final String activeLevel = level;
+        boolean annotationPresent = method.isAnnotationPresent(LogInfo.class);
+        if(LEVEL_SPECIFIED.equals(level)){
+            if(!annotationPresent){
+                return proceed;
+            }
+        }
+
+        LogInfoDto dto = new LogInfoDto();
 
         String companyName = properties.getCompanyName();
         String projectName = properties.getProjectName();
+        dto.setCompanyName(companyName);
+        dto.setProjectName(projectName);
+
+        //Cannot be processed asynchronously，it will lose request attributes
+        request2LogInfoDto(request,dto);
 
         //use Gson can resolve the args contains File,FastJson is not support
         String result = new Gson().toJson(proceed);
         executor.execute(()-> {
             try {
-                //TODO fix the sub thread lose the request attributes
-                this.writeLog(joinPoint, startTime,endTime, result, request, clazz, method, activeLevel,companyName,projectName);
+                this.writeLog(joinPoint, dto,startTime,endTime, result, clazz, method);
             } catch (Exception e) {
                 LOGGER.warn("{}.{} log info write failed,But it does not affect business logic:{}",
                         clazz.toString(),method.getName(),e.getMessage(),e);
@@ -134,23 +151,21 @@ public class LogInfoAspect implements InitializingBean {
         return proceed;
     }
 
+    private void request2LogInfoDto(HttpServletRequest request,LogInfoDto dto){
+        String url = request.getRequestURL() == null ? "" : request.getRequestURL().toString();
+        dto.setUrl(url);
+        dto.setMethodType(request.getMethod());
+        dto.setIp(request.getRemoteAddr());
+        dto.setUserAgent(request.getHeader("User-Agent"));
+        dto.setClientType(request.getHeader("Client-Type"));
+    }
     /**
      * write log
      */
-    private void writeLog(ProceedingJoinPoint joinPoint, long startTime,long endTime, String result,
-            HttpServletRequest request, Class<? extends MethodSignature> clazz, Method method,String activeLevel,
-            String companyName,String projectName) throws Exception{
-        final boolean annotationPresent = method.isAnnotationPresent(LogInfo.class);
-        if(LEVEL_SPECIFIED.equalsIgnoreCase(activeLevel)){
-            if(!annotationPresent){
-                return;
-            }
-        }
-
-        LogInfoDto dto = new LogInfoDto();
+    private void writeLog(ProceedingJoinPoint joinPoint,LogInfoDto dto, long startTime,long endTime, String result,
+            Class<? extends MethodSignature> clazz, Method method) throws Exception{
         LogInfo logInfo = method.getAnnotation(LogInfo.class);
-        dto.setCompanyName(companyName);
-        dto.setProjectName(projectName);
+
         dto.setModuleName(logInfo.moduleName());
         dto.setFunctionName(logInfo.functionName());
         dto.setRemark(logInfo.remark());
@@ -161,23 +176,23 @@ public class LogInfoAspect implements InitializingBean {
         }catch (Exception ex){
             LOGGER.warn("Get current user failed,But it does not affect business logic,{}",ex.getMessage(),ex);
         }
-        String url = request.getRequestURL() == null ? "" : request.getRequestURL().toString();
-        dto.setUrl(url);
-        dto.setMethodType(request.getMethod());
         dto.setClassName(clazz.toString());
         dto.setMethodName(method.getName());
-        dto.setIp(request.getRemoteAddr());
         dto.setRequestParams(new Gson().toJson(joinPoint.getArgs()));
         dto.setUserId(userId);
-        dto.setUserAgent(request.getHeader("User-Agent"));
-        dto.setClientType(request.getHeader("Client-Type"));
         dto.setCost(endTime-startTime);
         dto.setResult(result);
         dto.setGmtStart(FORMAT
                 .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(startTime), ZoneId.systemDefault())));
         dto.setGmtEnd(FORMAT
                 .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(endTime), ZoneId.systemDefault())));
-        sqlExecutor.insert(dto);
+
+        //defensive try catch,althought it will not happen in normally
+        try {
+            sqlExecutor.insert(dto,dataSource);
+        }catch (Exception ex){
+            LOGGER.error("The sqlExecutor may be null,please check,{}",ex.getMessage(),ex);
+        }
     }
 
     @Override
