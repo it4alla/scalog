@@ -47,7 +47,7 @@ scalog:
   level: all
   countryName: 中国
   groupName: 谷歌集团
-  String organizationName: 谷歌开源组织
+  organizationName: 谷歌开源组织
   companyName: 谷歌杭州分公司
   projectName: 棱镜项目
   
