@@ -82,14 +82,15 @@
 
 
   <distributionManagement>
-    <repository>
-      <id>releases</id> <!-- 正式版本地址 -->
-      <url>http://192.168.173.83:8081/repository/releases/</url>
-    </repository>
-    <snapshotRepository> <!-- 快照版本地址 -->
-      <id>snapshots</id>
-      <url>http://192.168.173.83:8081/repository/snapshots/</url>
-    </snapshotRepository>
+<!--    自己的仓库地址    -->
+<!--    <repository>-->
+<!--      <id>releases</id> &lt;!&ndash; 正式版本地址 &ndash;&gt;-->
+<!--      <url>http://192.168.173.83:8081/repository/releases/</url>-->
+<!--    </repository>-->
+<!--    <snapshotRepository> &lt;!&ndash; 快照版本地址 &ndash;&gt;-->
+<!--      <id>snapshots</id>-->
+<!--      <url>http://192.168.173.83:8081/repository/snapshots/</url>-->
+<!--    </snapshotRepository>-->
   </distributionManagement>
 
   <build>
