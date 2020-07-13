@@ -6,8 +6,6 @@ import com.java4all.scalog.annotation.LogInfo;
 import com.java4all.scalog.properties.ScalogProperties;
 import com.java4all.scalog.store.executor.BaseSqlExecutor;
 import com.java4all.scalog.store.LogInfoDto;
-import com.runlion.security.server.entity.UserInfo;
-import com.runlion.security.server.util.UserInfoUtil;
 import java.lang.reflect.Method;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -171,12 +169,13 @@ public class LogInfoAspect implements InitializingBean {
         dto.setFunctionName(logInfo.functionName());
         dto.setRemark(logInfo.remark());
         String userId = "";
-        try {
-            UserInfo currentUser = UserInfoUtil.getCurrentUser(UserInfo.class);
-            userId = currentUser.getUserId();
-        }catch (Exception ex){
-            LOGGER.warn("Get current user failed,But it does not affect business logic,{}",ex.getMessage(),ex);
-        }
+//        only for runlion
+//        try {
+//            UserInfo currentUser = UserInfoUtil.getCurrentUser(UserInfo.class);
+//            userId = currentUser.getUserId();
+//        }catch (Exception ex){
+//            LOGGER.warn("Get current user failed,But it does not affect business logic,{}",ex.getMessage(),ex);
+//        }
         dto.setClassName(clazz.toString());
         dto.setMethodName(method.getName());
         dto.setRequestParams(new Gson().toJson(joinPoint.getArgs()));
