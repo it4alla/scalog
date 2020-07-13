@@ -3,6 +3,7 @@ package com.java4all.scalog.aspect;
 import com.google.gson.Gson;
 import com.java4all.scalog.annotation.LoadLevel;
 import com.java4all.scalog.annotation.LogInfo;
+import com.java4all.scalog.annotation.LogInfoExclude;
 import com.java4all.scalog.properties.ScalogProperties;
 import com.java4all.scalog.store.executor.BaseSqlExecutor;
 import com.java4all.scalog.store.LogInfoDto;
@@ -119,9 +120,13 @@ public class LogInfoAspect implements InitializingBean {
         if(LEVEL_NO.equalsIgnoreCase(level)){
             return proceed;
         }
-        boolean annotationPresent = method.isAnnotationPresent(LogInfo.class);
+        boolean logInfoExcludePresent = method.isAnnotationPresent(LogInfoExclude.class);
+        if(!logInfoExcludePresent){
+            return proceed;
+        }
+        boolean logInfoPresent = method.isAnnotationPresent(LogInfo.class);
         if(LEVEL_SPECIFIED.equals(level)){
-            if(!annotationPresent){
+            if(!logInfoPresent){
                 return proceed;
             }
         }
