@@ -121,7 +121,7 @@ public class LogInfoAspect implements InitializingBean {
             return proceed;
         }
         boolean logInfoExcludePresent = method.isAnnotationPresent(LogInfoExclude.class);
-        if(!logInfoExcludePresent){
+        if(logInfoExcludePresent){
             return proceed;
         }
         boolean logInfoPresent = method.isAnnotationPresent(LogInfo.class);
