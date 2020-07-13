@@ -130,10 +130,11 @@ public class LogInfoAspect implements InitializingBean {
 
         LogInfoDto dto = new LogInfoDto();
 
-        String companyName = properties.getCompanyName();
-        String projectName = properties.getProjectName();
-        dto.setCompanyName(companyName);
-        dto.setProjectName(projectName);
+        dto.setCountryName(properties.getCountryName());
+        dto.setGroupName(properties.getGroupName());
+        dto.setOrganizationName(properties.getOrganizationName());
+        dto.setCompanyName(properties.getCompanyName());
+        dto.setProjectName(properties.getProjectName());
 
         //Cannot be processed asynchronously，it will lose request attributes
         request2LogInfoDto(request,dto);
@@ -163,7 +164,7 @@ public class LogInfoAspect implements InitializingBean {
      * write log
      */
     private void writeLog(ProceedingJoinPoint joinPoint,LogInfoDto dto, long startTime,long endTime, String result,
-            Class<? extends MethodSignature> clazz, Method method) throws Exception{
+            Class<? extends MethodSignature> clazz, Method method){
         LogInfo logInfo = method.getAnnotation(LogInfo.class);
 
         dto.setModuleName(logInfo.moduleName());
