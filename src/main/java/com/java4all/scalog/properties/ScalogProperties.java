@@ -27,11 +27,21 @@ public class ScalogProperties {
      */
     private String level;
 
+    /**country name*/
+    private String countryName;
+
+    /**group name*/
+    private String groupName;
+
+    /**organization name*/
+    private String organizationName;
+
     /**company name*/
     private String companyName;
 
     /**project name*/
     private String projectName;
+
 
     public String getDb() {
         return db;
@@ -63,5 +73,29 @@ public class ScalogProperties {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
     }
 }

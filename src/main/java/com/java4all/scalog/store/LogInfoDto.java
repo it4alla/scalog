@@ -6,6 +6,12 @@ package com.java4all.scalog.store;
 public class LogInfoDto {
     /**id*/
     private String id;
+    /**国家*/
+    private String countryName;
+    /**集团*/
+    private String groupName;
+    /**组织*/
+    private String organizationName;
     /**公司名称*/
     private String companyName;
     /**项目名称*/
@@ -234,5 +240,29 @@ public class LogInfoDto {
 
     public void setUserAgent(String userAgent) {
         this.userAgent = userAgent;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
     }
 }

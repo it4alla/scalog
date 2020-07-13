@@ -45,6 +45,9 @@ all：记录所有的接口
 scalog:
   db: mysql
   level: all
+  countryName: 中国
+  groupName: 谷歌集团
+  String organizationName: 谷歌开源组织
   companyName: 谷歌杭州分公司
   projectName: 棱镜项目
   
@@ -83,6 +86,9 @@ scalog:
 ```java
 CREATE TABLE `log_info` (
   `id` char(50) NOT NULL,
+  `country_name` char(200) DEFAULT NULL COMMENT '国家',
+  `group_name` char(200) DEFAULT NULL COMMENT '集团名称',
+  `organization_name` char(200) DEFAULT NULL COMMENT '组织名称',
   `company_name` char(200) DEFAULT NULL COMMENT '公司名称',
   `project_name` char(200) DEFAULT NULL COMMENT '项目名称',
   `module_name` char(200) DEFAULT NULL COMMENT '模块名称',
