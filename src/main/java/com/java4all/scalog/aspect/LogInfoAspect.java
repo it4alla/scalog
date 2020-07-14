@@ -5,8 +5,10 @@ import com.java4all.scalog.annotation.LoadLevel;
 import com.java4all.scalog.annotation.LogInfo;
 import com.java4all.scalog.annotation.LogInfoExclude;
 import com.java4all.scalog.properties.ScalogProperties;
+import com.java4all.scalog.store.MongoLogInfo;
 import com.java4all.scalog.store.executor.BaseSqlExecutor;
 import com.java4all.scalog.store.LogInfoDto;
+import com.java4all.scalog.utils.BaseHelper;
 import java.lang.reflect.Method;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -19,6 +21,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -30,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -53,6 +57,7 @@ public class LogInfoAspect implements InitializingBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogInfoAspect.class);
     private static final String DEFAULT_DB_TYPE = "mysql";
+    private static final String MONGO_DB = "mongodb";
     private static final String LEVEL_NO = "no";
     private static final String LEVEL_ALL = "all";
     private static final String LEVEL_SPECIFIED = "specified";
@@ -71,6 +76,9 @@ public class LogInfoAspect implements InitializingBean {
      */
     @Autowired
     private DataSource dataSource;
+
+    @Resource
+    private MongoTemplate mongoTemplate;
 
     /**
      * *.controller
@@ -144,9 +152,10 @@ public class LogInfoAspect implements InitializingBean {
 
         //use Gson can resolve the args contains File,FastJson is not support
         String result = new Gson().toJson(proceed);
+        String db = properties.getDb();
         executor.execute(()-> {
             try {
-                this.writeLog(joinPoint, dto,startTime,endTime, result, clazz, method);
+                this.writeLog(joinPoint, dto,startTime,endTime, result, clazz, method,db);
             } catch (Exception e) {
                 LOGGER.warn("{}.{} log info write failed,But it does not affect business logic:{}",
                         clazz.toString(),method.getName(),e.getMessage(),e);
@@ -166,8 +175,8 @@ public class LogInfoAspect implements InitializingBean {
     /**
      * write log
      */
-    private void writeLog(ProceedingJoinPoint joinPoint,LogInfoDto dto, long startTime,long endTime, String result,
-            Class<? extends MethodSignature> clazz, Method method){
+    private void writeLog(ProceedingJoinPoint joinPoint, LogInfoDto dto, long startTime, long endTime, String result,
+                          Class<? extends MethodSignature> clazz, Method method, String db) throws Exception{
         LogInfo logInfo = method.getAnnotation(LogInfo.class);
 
         dto.setModuleName(logInfo.moduleName());
@@ -193,10 +202,15 @@ public class LogInfoAspect implements InitializingBean {
                 .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(endTime), ZoneId.systemDefault())));
 
         //defensive try catch,althought it will not happen in normally
-        try {
-            sqlExecutor.insert(dto,dataSource);
-        }catch (Exception ex){
-            LOGGER.error("The sqlExecutor may be null,please check,{}",ex.getMessage(),ex);
+        if (MONGO_DB.equals(db)){
+            MongoLogInfo mongoLogInfo = BaseHelper.r2t(dto, MongoLogInfo.class);
+            mongoTemplate.save(mongoLogInfo);
+        }else {
+            try {
+                sqlExecutor.insert(dto,dataSource);
+            }catch (Exception ex){
+                LOGGER.error("The sqlExecutor may be null,please check,{}",ex.getMessage(),ex);
+            }
         }
     }
 
