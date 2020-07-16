@@ -14,6 +14,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
@@ -178,10 +179,9 @@ public class LogInfoAspect implements InitializingBean {
     private void writeLog(ProceedingJoinPoint joinPoint, LogInfoDto dto, long startTime, long endTime, String result,
                           Class<? extends MethodSignature> clazz, Method method, String db) throws Exception{
         LogInfo logInfo = method.getAnnotation(LogInfo.class);
-
-        dto.setModuleName(logInfo.moduleName());
-        dto.setFunctionName(logInfo.functionName());
-        dto.setRemark(logInfo.remark());
+        dto.setModuleName(Optional.ofNullable(logInfo).map(LogInfo::moduleName).orElse(null));
+        dto.setFunctionName(Optional.ofNullable(logInfo).map(LogInfo::functionName).orElse(null));
+        dto.setRemark(Optional.ofNullable(logInfo).map(LogInfo::remark).orElse(null));
         String userId = "";
 //        only for runlion
 //        try {
