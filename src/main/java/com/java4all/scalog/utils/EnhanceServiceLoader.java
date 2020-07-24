@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author wangzhongxiang
- * @date 2020年07月24日 14:40:13
  */
 public class EnhanceServiceLoader {
     private static final Logger LOGGER = LoggerFactory.getLogger(EnhanceServiceLoader.class);

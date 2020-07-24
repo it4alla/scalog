@@ -6,7 +6,6 @@ import com.java4all.scalog.properties.MysqlProperties;
 
 /**
  * @author wangzhongxiang
- * @date 2020年07月15日 15:08:58
  */
 @LoadLevel(name = "mysql")
 public class DruidDataSourceGenerator implements SourceGenerator{
