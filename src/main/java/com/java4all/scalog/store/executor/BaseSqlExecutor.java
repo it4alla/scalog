@@ -11,8 +11,7 @@ public interface BaseSqlExecutor {
      * insert
      *
      * @param logInfoDto
-     * @param dataSource
      * @throws Exception
      */
-    void insert(LogInfoDto logInfoDto,Object dataSource) throws Exception;
+    void insert(LogInfoDto logInfoDto) throws Exception;
 }

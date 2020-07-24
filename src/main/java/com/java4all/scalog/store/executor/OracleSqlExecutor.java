@@ -17,7 +17,7 @@ public class OracleSqlExecutor implements BaseSqlExecutor{
      * insert
      */
     @Override
-    public void insert(LogInfoDto logInfoDto,Object dataSource) throws Exception{
+    public void insert(LogInfoDto logInfoDto) throws Exception{
         throw new NoSuchMethodException("Not support Oracle now!");
     }
 }

@@ -20,13 +20,18 @@ public class MysqlSqlExecutor implements BaseSqlExecutor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MysqlSqlExecutor.class);
 
+    protected DataSource dataSource = null;
+
     public MysqlSqlExecutor() {
     }
 
+    public MysqlSqlExecutor(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Override
-    public void insert(LogInfoDto dto,Object dataSource) {
-        DataSource source = (DataSource)dataSource;
+    public void insert(LogInfoDto dto) {
+        DataSource source = dataSource;
         Connection connection = null;
         try {
             connection = source.getConnection();

@@ -1,21 +1,20 @@
 package com.java4all.scalog.aspect;
 
 import com.google.gson.Gson;
-import com.java4all.scalog.annotation.LoadLevel;
 import com.java4all.scalog.annotation.LogInfo;
 import com.java4all.scalog.annotation.LogInfoExclude;
 import com.java4all.scalog.properties.ScalogProperties;
-import com.java4all.scalog.store.MongoLogInfo;
 import com.java4all.scalog.store.executor.BaseSqlExecutor;
 import com.java4all.scalog.store.LogInfoDto;
-import com.java4all.scalog.utils.BaseHelper;
+import com.java4all.scalog.store.source.SourceGenerator;
+import com.java4all.scalog.utils.EnhanceServiceLoader;
+import com.mongodb.client.MongoClient;
 import java.lang.reflect.Method;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.ServiceLoader;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -57,8 +56,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class LogInfoAspect implements InitializingBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogInfoAspect.class);
-    private static final String DEFAULT_DB_TYPE = "mysql";
+    private static final String MYSQL_DB = "mysql";
     private static final String MONGO_DB = "mongodb";
+    private static final String DEFAULT_DB_TYPE = MYSQL_DB;
     private static final String LEVEL_NO = "no";
     private static final String LEVEL_ALL = "all";
     private static final String LEVEL_SPECIFIED = "specified";
@@ -75,8 +75,8 @@ public class LogInfoAspect implements InitializingBean {
     /**
      * the dataSource from the application context
      */
-    @Autowired
-    private DataSource dataSource;
+//    @Autowired
+//    private DataSource dataSource;
 
     @Resource
     private MongoTemplate mongoTemplate;
@@ -202,30 +202,49 @@ public class LogInfoAspect implements InitializingBean {
                 .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(endTime), ZoneId.systemDefault())));
 
         //defensive try catch,althought it will not happen in normally
-        if (MONGO_DB.equals(db)){
-            MongoLogInfo mongoLogInfo = BaseHelper.r2t(dto, MongoLogInfo.class);
-            mongoTemplate.save(mongoLogInfo);
-        }else {
-            try {
-                sqlExecutor.insert(dto,dataSource);
-            }catch (Exception ex){
-                LOGGER.error("The sqlExecutor may be null,please check,{}",ex.getMessage(),ex);
-            }
+        try {
+            sqlExecutor.insert(dto);
+        }catch (Exception ex){
+            LOGGER.error("The sqlExecutor may be null,please check,{}",ex.getMessage(),ex);
         }
+//        if (MONGO_DB.equals(db)){
+//            MongoLogInfo mongoLogInfo = BaseHelper.r2t(dto, MongoLogInfo.class);
+//            mongoTemplate.save(mongoLogInfo);
+//        }else {
+//            try {
+//                sqlExecutor.insert(dto,dataSource);
+//            }catch (Exception ex){
+//                LOGGER.error("The sqlExecutor may be null,please check,{}",ex.getMessage(),ex);
+//            }
+//        }
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
         String dbType = StringUtils.isEmpty(properties.getDb()) ? DEFAULT_DB_TYPE : properties.getDb();
         LOGGER.info("scalog db type is [{}]",dbType);
-        ServiceLoader<BaseSqlExecutor> sqlExecutors = ServiceLoader.load(BaseSqlExecutor.class);
-        for (BaseSqlExecutor executor : sqlExecutors){
-            LoadLevel loadLevel = executor.getClass().getAnnotation(LoadLevel.class);
-            if(loadLevel != null && dbType.equalsIgnoreCase(loadLevel.name())){
-                sqlExecutor = executor.getClass().newInstance();
-                LOGGER.info("load sqlExecutor [{}] ......",sqlExecutor.getClass().getName());
-            }
+        //load data source
+        SourceGenerator sourceGenerator = EnhanceServiceLoader.load(SourceGenerator.class, dbType, null, null);
+        Object obj = sourceGenerator.generateSource();
+
+        //load sqlExecutor
+        if(MYSQL_DB.equalsIgnoreCase(dbType)){
+            sqlExecutor = EnhanceServiceLoader.load(BaseSqlExecutor.class,dbType,
+                    new Class[]{DataSource.class},new Object[]{(DataSource)obj});
+        }else if(MONGO_DB.equalsIgnoreCase(dbType)){
+            //TODO 待处理，模仿mysql
+            sqlExecutor = EnhanceServiceLoader.load(BaseSqlExecutor.class,dbType,
+                    new Class[]{MongoClient.class},new Object[]{(MongoClient)obj});
         }
+
+//        ServiceLoader<BaseSqlExecutor> sqlExecutors = ServiceLoader.load(BaseSqlExecutor.class);
+//        for (BaseSqlExecutor executor : sqlExecutors){
+//            LoadLevel loadLevel = executor.getClass().getAnnotation(LoadLevel.class);
+//            if(loadLevel != null && dbType.equalsIgnoreCase(loadLevel.name())){
+//                sqlExecutor = executor.getClass().newInstance();
+//                LOGGER.info("load sqlExecutor [{}] ......",sqlExecutor.getClass().getName());
+//            }
+//        }
     }
 
 
