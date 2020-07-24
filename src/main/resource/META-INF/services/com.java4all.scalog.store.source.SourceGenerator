@@ -1,0 +1,2 @@
+com.java4all.scalog.store.source.DruidDataSourceGenerator
+com.java4all.scalog.store.source.MongoDataSourceGenerator
