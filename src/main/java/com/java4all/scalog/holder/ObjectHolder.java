@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public enum  ObjectHolder {
 
+    /**singleton*/
     INSTANCE;
     private static final int MAP_SIZE = 8;
     private static final Map<String,Object> OBJECT_MAP = new ConcurrentHashMap<>(MAP_SIZE);

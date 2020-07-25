@@ -5,6 +5,10 @@ package com.java4all.scalog.store.source;
  */
 public interface SourceGenerator {
 
+    /**
+     * generate source
+     * @return
+     */
     Object generateSource();
 
 }
