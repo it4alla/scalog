@@ -34,8 +34,7 @@ public class EnhanceServiceLoader {
 
         try {
             S result = initInstance(service,activeExtentions.get(0),argsType,args);
-            LOGGER.info("load " + service.getSimpleName() + "[" + activeName + "] extension by class[" + extention
-                    .getName() + "]");
+            LOGGER.info("load " + service.getSimpleName() + "[" + activeName + "] extension by class[" + extention.getName() + "]");
             return result;
         } catch (IllegalAccessException e) {
             e.printStackTrace();
