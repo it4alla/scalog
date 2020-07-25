@@ -1,4 +1,4 @@
-package com.java4all.scalog.properties;
+package com.java4all.scalog.configuration;
 
 /**
  * @author wangzhongxiang

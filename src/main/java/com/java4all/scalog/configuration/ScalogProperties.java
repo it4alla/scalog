@@ -1,4 +1,4 @@
-package com.java4all.scalog.properties;
+package com.java4all.scalog.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "scalog")
 public class ScalogProperties {
+
+    //TODO need to support spi
 
     /**
      * the scalog db type:

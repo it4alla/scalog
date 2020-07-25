@@ -1,7 +1,7 @@
-package com.java4all.scalog.properties.springcloud;
+package com.java4all.scalog.configuration.springcloud;
 
 import com.java4all.scalog.holder.ObjectHolder;
-import com.java4all.scalog.properties.Constants;
+import com.java4all.scalog.configuration.Constants;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

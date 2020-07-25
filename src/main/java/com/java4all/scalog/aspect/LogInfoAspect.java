@@ -3,7 +3,7 @@ package com.java4all.scalog.aspect;
 import com.google.gson.Gson;
 import com.java4all.scalog.annotation.LogInfo;
 import com.java4all.scalog.annotation.LogInfoExclude;
-import com.java4all.scalog.properties.ScalogProperties;
+import com.java4all.scalog.configuration.ScalogProperties;
 import com.java4all.scalog.store.executor.BaseSqlExecutor;
 import com.java4all.scalog.store.LogInfoDto;
 import com.java4all.scalog.store.source.SourceGenerator;
@@ -72,14 +72,6 @@ public class LogInfoAspect implements InitializingBean {
     @Autowired
     private ScalogProperties properties;
     private BaseSqlExecutor sqlExecutor;
-    /**
-     * the dataSource from the application context
-     */
-//    @Autowired
-//    private DataSource dataSource;
-
-    @Resource
-    private MongoTemplate mongoTemplate;
 
     /**
      * *.controller
@@ -153,10 +145,9 @@ public class LogInfoAspect implements InitializingBean {
 
         //use Gson can resolve the args contains File,FastJson is not support
         String result = new Gson().toJson(proceed);
-        String db = properties.getDb();
         executor.execute(()-> {
             try {
-                this.writeLog(joinPoint, dto,startTime,endTime, result, clazz, method,db);
+                this.writeLog(joinPoint, dto,startTime,endTime, result, clazz, method);
             } catch (Exception e) {
                 LOGGER.warn("{}.{} log info write failed,But it does not affect business logic:{}",
                         clazz.toString(),method.getName(),e.getMessage(),e);
@@ -177,11 +168,13 @@ public class LogInfoAspect implements InitializingBean {
      * write log
      */
     private void writeLog(ProceedingJoinPoint joinPoint, LogInfoDto dto, long startTime, long endTime, String result,
-                          Class<? extends MethodSignature> clazz, Method method, String db) throws Exception{
+                          Class<? extends MethodSignature> clazz, Method method) {
         LogInfo logInfo = method.getAnnotation(LogInfo.class);
-        dto.setModuleName(Optional.ofNullable(logInfo).map(LogInfo::moduleName).orElse(null));
-        dto.setFunctionName(Optional.ofNullable(logInfo).map(LogInfo::functionName).orElse(null));
-        dto.setRemark(Optional.ofNullable(logInfo).map(LogInfo::remark).orElse(null));
+        if(null != logInfo){
+            dto.setModuleName(logInfo.moduleName());
+            dto.setFunctionName(logInfo.functionName());
+            dto.setRemark(logInfo.remark());
+        }
         String userId = "";
 //        only for runlion
 //        try {
@@ -207,16 +200,6 @@ public class LogInfoAspect implements InitializingBean {
         }catch (Exception ex){
             LOGGER.error("The sqlExecutor may be null,please check,{}",ex.getMessage(),ex);
         }
-//        if (MONGO_DB.equals(db)){
-//            MongoLogInfo mongoLogInfo = BaseHelper.r2t(dto, MongoLogInfo.class);
-//            mongoTemplate.save(mongoLogInfo);
-//        }else {
-//            try {
-//                sqlExecutor.insert(dto,dataSource);
-//            }catch (Exception ex){
-//                LOGGER.error("The sqlExecutor may be null,please check,{}",ex.getMessage(),ex);
-//            }
-//        }
     }
 
     @Override
@@ -236,15 +219,6 @@ public class LogInfoAspect implements InitializingBean {
             sqlExecutor = EnhanceServiceLoader.load(BaseSqlExecutor.class,dbType,
                     new Class[]{MongoClient.class},new Object[]{(MongoClient)obj});
         }
-
-//        ServiceLoader<BaseSqlExecutor> sqlExecutors = ServiceLoader.load(BaseSqlExecutor.class);
-//        for (BaseSqlExecutor executor : sqlExecutors){
-//            LoadLevel loadLevel = executor.getClass().getAnnotation(LoadLevel.class);
-//            if(loadLevel != null && dbType.equalsIgnoreCase(loadLevel.name())){
-//                sqlExecutor = executor.getClass().newInstance();
-//                LOGGER.info("load sqlExecutor [{}] ......",sqlExecutor.getClass().getName());
-//            }
-//        }
     }
 
 
