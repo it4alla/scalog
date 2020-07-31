@@ -16,8 +16,8 @@ scalog的实现也是基于切面和注解，但是可以打包为jar的形式�
 如果公司有私有仓库，可修改pom.xml中的仓库地址，推送到私有仓库。其他项目直接引入依赖即可。
 #### 2.1创建记录表
 在项目数据库中创建数据库表
-- ![mysql脚本](https://github.com/it4alla/scalog/tree/master/src/main/resource/sql/mysql.sql)
-- ![oracle脚本](https://github.com/it4alla/scalog/tree/master/src/main/resource/sql/oracle.sql)
+- [mysql脚本](https://github.com/it4alla/scalog/tree/master/src/main/resource/sql/mysql.sql)
+- [oracle脚本](https://github.com/it4alla/scalog/tree/master/src/main/resource/sql/oracle.sql)
 #### 2.2项目中引入pom依赖
 ```java
 		<dependency>
