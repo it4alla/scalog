@@ -19,8 +19,11 @@ import com.java4all.scalog.configuration.springcloud.SpringCloudConfig;
  * @author wangzhongxiang
  */
 @LoadLevel(name = "mysql")
-public class DruidDataSourceGenerator implements SourceGenerator{
+public class MysqlDataSourceGenerator implements SourceGenerator{
 
+    /**
+     * generate source
+     */
     @Override
     public Object generateSource() {
         DruidDataSource dataSource = new DruidDataSource();

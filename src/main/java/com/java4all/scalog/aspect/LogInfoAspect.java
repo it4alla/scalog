@@ -57,6 +57,7 @@ public class LogInfoAspect implements InitializingBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogInfoAspect.class);
     private static final String MYSQL_DB = "mysql";
+    private static final String ORACLE_DB = "oracle";
     private static final String MONGO_DB = "mongodb";
     private static final String DEFAULT_DB_TYPE = MYSQL_DB;
     private static final String LEVEL_NO = "no";
@@ -203,21 +204,22 @@ public class LogInfoAspect implements InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         String dbType = StringUtils.isEmpty(properties.getDb()) ? DEFAULT_DB_TYPE : properties.getDb();
         LOGGER.info("scalog db type is [{}]",dbType);
         //load data source
-        SourceGenerator sourceGenerator = EnhanceServiceLoader.load(SourceGenerator.class, dbType, null, null);
-        Object obj = sourceGenerator.generateSource();
+        SourceGenerator sourceGenerator = EnhanceServiceLoader.load(SourceGenerator.class, dbType);
+        Object source = sourceGenerator.generateSource();
 
         //load sqlExecutor
-        if(MYSQL_DB.equalsIgnoreCase(dbType)){
+        if(MYSQL_DB.equalsIgnoreCase(dbType) ||
+                ORACLE_DB.equalsIgnoreCase(dbType)){
             sqlExecutor = EnhanceServiceLoader.load(BaseSqlExecutor.class,dbType,
-                    new Class[]{DataSource.class},new Object[]{(DataSource)obj});
+                    new Class[]{DataSource.class},new Object[]{(DataSource)source});
         }else if(MONGO_DB.equalsIgnoreCase(dbType)){
-            //TODO 待处理，模仿mysql
+            //TODO 待处理
             sqlExecutor = EnhanceServiceLoader.load(BaseSqlExecutor.class,dbType,
-                    new Class[]{MongoClient.class},new Object[]{(MongoClient)obj});
+                    new Class[]{MongoClient.class},new Object[]{(MongoClient)source});
         }
     }
 
