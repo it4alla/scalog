@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 /**
  * @author wangzhongxiang
  */
-@Deprecated
+//@Deprecated
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Import({SpringApplicationContextProviderRegistrar.class})

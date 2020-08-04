@@ -10,8 +10,8 @@ public interface BaseSqlExecutor {
     /**
      * insert
      *
-     * @param logInfoDto
+     * @param dto
      * @throws Exception
      */
-    void insert(LogInfoDto logInfoDto) throws Exception;
+    void insert(LogInfoDto dto) throws Exception;
 }

@@ -7,7 +7,7 @@ import org.springframework.core.type.AnnotationMetadata;
 /**
  * @author wangzhongxiang
  */
-@Deprecated
+//@Deprecated
 public class SpringApplicationContextProviderRegistrar implements ImportBeanDefinitionRegistrar {
 
     @Override

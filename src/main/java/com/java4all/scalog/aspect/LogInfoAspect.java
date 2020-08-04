@@ -14,14 +14,12 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -33,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -59,6 +56,7 @@ public class LogInfoAspect implements InitializingBean {
     private static final String MYSQL_DB = "mysql";
     private static final String ORACLE_DB = "oracle";
     private static final String MONGO_DB = "mongodb";
+    private static final String POSTGRESQL_DB = "postgresql";
     private static final String DEFAULT_DB_TYPE = MYSQL_DB;
     private static final String LEVEL_NO = "no";
     private static final String LEVEL_ALL = "all";
@@ -213,7 +211,8 @@ public class LogInfoAspect implements InitializingBean {
 
         //load sqlExecutor
         if(MYSQL_DB.equalsIgnoreCase(dbType) ||
-                ORACLE_DB.equalsIgnoreCase(dbType)){
+                ORACLE_DB.equalsIgnoreCase(dbType) ||
+                POSTGRESQL_DB.equalsIgnoreCase(dbType)){
             sqlExecutor = EnhanceServiceLoader.load(BaseSqlExecutor.class,dbType,
                     new Class[]{DataSource.class},new Object[]{(DataSource)source});
         }else if(MONGO_DB.equalsIgnoreCase(dbType)){

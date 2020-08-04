@@ -1,3 +1,4 @@
+# create table
 CREATE TABLE `log_info` (
     `id` char(50) NOT NULL,
     `country_name` char(200) DEFAULT NULL COMMENT '国家',
