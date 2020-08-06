@@ -63,7 +63,7 @@ public class LogInfoAspect implements InitializingBean {
     private static final String LEVEL_SPECIFIED = "specified";
     private static final String DEFAULT_LEVEL = LEVEL_ALL;
 
-    private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+    private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static ThreadPoolExecutor executor =
             new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),8,10,
             TimeUnit.SECONDS,new LinkedBlockingQueue<>(100000),
