@@ -21,6 +21,10 @@ public class EnhanceServiceLoader {
     private static final Logger LOGGER = LoggerFactory.getLogger(EnhanceServiceLoader.class);
     private static final String SERVICES_DIRECTORY = "META-INF/services/";
 
+    public static <S> S load(Class<S> service,String activeName){
+        return load(service,activeName,null,null);
+    }
+
     public static <S>  S load(Class<S> service,String activeName,Class[] argsType,Object[] args){
         List<Class> extentions = findAllExtentions(service, activeName, EnhanceServiceLoader.class.getClassLoader());
         List<Class> activeExtentions = new ArrayList<>();

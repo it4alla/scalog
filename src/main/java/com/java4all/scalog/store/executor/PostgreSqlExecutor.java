@@ -3,6 +3,7 @@ package com.java4all.scalog.store.executor;
 import com.java4all.scalog.annotation.LoadLevel;
 import com.java4all.scalog.store.LogInfoDto;
 import com.java4all.scalog.store.sql.MysqlSql;
+import com.java4all.scalog.store.sql.PostgreSqlSql;
 import com.java4all.scalog.utils.SourceUtil;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,32 +13,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Mysql Executor
  * @author wangzhongxiang
  */
-@LoadLevel(name = "mysql")
-public class MysqlSqlExecutor implements BaseSqlExecutor {
+@LoadLevel(name = "postgresql")
+public class PostgreSqlExecutor implements BaseSqlExecutor{
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MysqlSqlExecutor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PostgreSqlExecutor.class);
 
-    protected DataSource dataSource = null;
+    private DataSource dataSource;
 
-    public MysqlSqlExecutor() {
+    public PostgreSqlExecutor() {
     }
 
-    public MysqlSqlExecutor(DataSource dataSource) {
+    public PostgreSqlExecutor(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
+    /**
+     * insert
+     */
     @SuppressWarnings("all")
     @Override
-    public void insert(LogInfoDto dto) {
+    public void insert(LogInfoDto dto) throws Exception {
         DataSource source = dataSource;
         Connection connection = null;
         try {
             connection = source.getConnection();
             connection.setAutoCommit(true);
-            PreparedStatement ps = connection.prepareStatement(MysqlSql.INSERT_LOG_SQL);
+            PreparedStatement ps = connection.prepareStatement(PostgreSqlSql.INSERT_LOG_SQL);
             ps.setString(1,SourceUtil.generateId());
             ps.setString(2,dto.getCountryName());
             ps.setString(3,dto.getGroupName());

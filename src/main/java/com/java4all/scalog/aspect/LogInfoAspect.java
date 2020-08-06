@@ -14,14 +14,12 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -33,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -57,14 +54,16 @@ public class LogInfoAspect implements InitializingBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogInfoAspect.class);
     private static final String MYSQL_DB = "mysql";
+    private static final String ORACLE_DB = "oracle";
     private static final String MONGO_DB = "mongodb";
+    private static final String POSTGRESQL_DB = "postgresql";
     private static final String DEFAULT_DB_TYPE = MYSQL_DB;
     private static final String LEVEL_NO = "no";
     private static final String LEVEL_ALL = "all";
     private static final String LEVEL_SPECIFIED = "specified";
     private static final String DEFAULT_LEVEL = LEVEL_ALL;
 
-    private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+    private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static ThreadPoolExecutor executor =
             new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),8,10,
             TimeUnit.SECONDS,new LinkedBlockingQueue<>(100000),
@@ -203,21 +202,23 @@ public class LogInfoAspect implements InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         String dbType = StringUtils.isEmpty(properties.getDb()) ? DEFAULT_DB_TYPE : properties.getDb();
         LOGGER.info("scalog db type is [{}]",dbType);
         //load data source
-        SourceGenerator sourceGenerator = EnhanceServiceLoader.load(SourceGenerator.class, dbType, null, null);
-        Object obj = sourceGenerator.generateSource();
+        SourceGenerator sourceGenerator = EnhanceServiceLoader.load(SourceGenerator.class, dbType);
+        Object source = sourceGenerator.generateSource();
 
         //load sqlExecutor
-        if(MYSQL_DB.equalsIgnoreCase(dbType)){
+        if(MYSQL_DB.equalsIgnoreCase(dbType) ||
+                ORACLE_DB.equalsIgnoreCase(dbType) ||
+                POSTGRESQL_DB.equalsIgnoreCase(dbType)){
             sqlExecutor = EnhanceServiceLoader.load(BaseSqlExecutor.class,dbType,
-                    new Class[]{DataSource.class},new Object[]{(DataSource)obj});
+                    new Class[]{DataSource.class},new Object[]{(DataSource)source});
         }else if(MONGO_DB.equalsIgnoreCase(dbType)){
-            //TODO 待处理，模仿mysql
+            //TODO 待处理
             sqlExecutor = EnhanceServiceLoader.load(BaseSqlExecutor.class,dbType,
-                    new Class[]{MongoClient.class},new Object[]{(MongoClient)obj});
+                    new Class[]{MongoClient.class},new Object[]{(MongoClient)source});
         }
     }
 
