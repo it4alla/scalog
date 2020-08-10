@@ -57,7 +57,7 @@ public class LogInfoAspect implements InitializingBean {
     private static final String MONGO_DB = "mongodb";
     private static final String POSTGRESQL_DB = "postgresql";
     private static final String DEFAULT_DB_TYPE = MYSQL_DB;
-    private static final String LEVEL_NO = "no";
+    private static final String LEVEL_NOTHING = "nothing";
     private static final String LEVEL_ALL = "all";
     private static final String LEVEL_SPECIFIED = "specified";
     private static final String DEFAULT_LEVEL = LEVEL_ALL;
@@ -116,7 +116,7 @@ public class LogInfoAspect implements InitializingBean {
         if(StringUtils.isEmpty(level)){
             level  = DEFAULT_LEVEL;
         }
-        if(LEVEL_NO.equalsIgnoreCase(level)){
+        if(LEVEL_NOTHING.equalsIgnoreCase(level)){
             return proceed;
         }
         boolean logInfoExcludePresent = method.isAnnotationPresent(LogInfoExclude.class);

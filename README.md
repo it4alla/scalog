@@ -7,7 +7,7 @@
 scalog的实现也是基于切面和注解，但是可以打包为jar的形式，项目中直接引入pom依赖即可。
 
 目前支持3种策略：
-- no：关闭日志记录，切面不记录任何日志
+- nothing：关闭日志记录，切面不记录任何日志
 - specified：仅添加@LogInfo注解的接口才会记录
 - all：记录所有的接口
 - some：记录所有接口，但是不记录添加了@LogInfoExclude的接口
@@ -40,7 +40,7 @@ scalog的实现也是基于切面和注解，但是可以打包为jar的形式�
 #### 2.5配置文件
 提供配置项如下：
 - scalog.db 日志存储的数据库，支持 mysql , (oracle , elasticsearch , mongodb待实现)
-- scalog.level 日志的记录策略，支持 no , specified , all ,some 
+- scalog.level 日志的记录策略，支持 nothing , specified , all ,some 
 - scalog.countryName 国家名称
 - scalog.groupName 集团名称
 - scalog.organizationName 组织名称
