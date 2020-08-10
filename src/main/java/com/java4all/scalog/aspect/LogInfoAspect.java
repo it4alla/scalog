@@ -8,7 +8,6 @@ import com.java4all.scalog.store.executor.BaseSqlExecutor;
 import com.java4all.scalog.store.LogInfoDto;
 import com.java4all.scalog.store.source.SourceGenerator;
 import com.java4all.scalog.utils.EnhanceServiceLoader;
-import com.mongodb.client.MongoClient;
 import java.lang.reflect.Method;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -215,11 +214,12 @@ public class LogInfoAspect implements InitializingBean {
                 POSTGRESQL_DB.equalsIgnoreCase(dbType)){
             sqlExecutor = EnhanceServiceLoader.load(BaseSqlExecutor.class,dbType,
                     new Class[]{DataSource.class},new Object[]{(DataSource)source});
-        }else if(MONGO_DB.equalsIgnoreCase(dbType)){
-            //TODO 待处理
-            sqlExecutor = EnhanceServiceLoader.load(BaseSqlExecutor.class,dbType,
-                    new Class[]{MongoClient.class},new Object[]{(MongoClient)source});
         }
+//        else if(MONGO_DB.equalsIgnoreCase(dbType)){
+//            //TODO 待处理
+//            sqlExecutor = EnhanceServiceLoader.load(BaseSqlExecutor.class,dbType,
+//                    new Class[]{MongoClient.class},new Object[]{(MongoClient)source});
+//        }
     }
 
 

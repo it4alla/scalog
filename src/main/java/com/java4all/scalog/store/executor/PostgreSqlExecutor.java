@@ -2,7 +2,6 @@ package com.java4all.scalog.store.executor;
 
 import com.java4all.scalog.annotation.LoadLevel;
 import com.java4all.scalog.store.LogInfoDto;
-import com.java4all.scalog.store.sql.MysqlSql;
 import com.java4all.scalog.store.sql.PostgreSqlSql;
 import com.java4all.scalog.utils.SourceUtil;
 import java.sql.Connection;
