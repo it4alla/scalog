@@ -9,11 +9,13 @@ public class Constants {
     public static final String DATASOURCE = "datasource";
     public static final String SPRING_DATASOURCE = "spring.datasource";
     public static final String DELIMITER = ".";
+    public static final String SCALOG = "scalog";
 
     public static final String URL = "url";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
     public static final String DRIVER_CLASS_NAME = "driver-class-name";
+    public static final String DRIVER_CLASS_NAME2 = "driverClassName";
 
     public static final String DEFAULT_MYSQL_URL = "127.0.0.1:3306";
     public static final String DEFAULT_USERNAME = "root";
