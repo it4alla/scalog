@@ -18,11 +18,17 @@ public class ScalogProperties {
      */
     private String db;
 
+    private String url;
+    private String username;
+    private String password;
+    private String driverClassName;
+    private String type;
+
     /**
      * the scalog level:
-     * no , specified , all
+     * nothing , specified , all
      *
-     * no: will record nothing
+     * nothing: will record nothing
      * specified: will record the controller's interface which has {@link com.java4all.scalog.annotation.LogInfo} annotation
      * all: will record all of the controller's interface
      *
@@ -99,5 +105,45 @@ public class ScalogProperties {
 
     public void setOrganizationName(String organizationName) {
         this.organizationName = organizationName;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getDriverClassName() {
+        return driverClassName;
+    }
+
+    public void setDriverClassName(String driverClassName) {
+        this.driverClassName = driverClassName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

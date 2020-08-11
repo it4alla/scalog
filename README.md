@@ -39,26 +39,36 @@ scalog的实现也是基于切面和注解，但是可以打包为jar的形式�
 
 #### 2.5配置文件
 提供配置项如下：
-- scalog.db 日志存储的数据库，支持 mysql , (oracle , elasticsearch , mongodb待实现)
 - scalog.level 日志的记录策略，支持 nothing , specified , all ,some 
 - scalog.countryName 国家名称
 - scalog.groupName 集团名称
 - scalog.organizationName 组织名称
 - scalog.companyName 公司名称
 - scalog.projectName 项目名称
+- scalog.db 日志存储的数据库，支持 mysql , postgresql (oracle , mongodb待实现)
+- scalog.url 数据库url
+- scalog.username 数据库用户名
+- scalog.password 数据库密码
+- scalog.driver-class-name 数据库驱动
+- scalog.type  数据库数据源
 
 
 示例：
 ```java
 scalog:
-  db: mysql
   level: all
   countryName: 中国
   groupName: 谷歌集团
   organizationName: 谷歌开源组织
   companyName: 谷歌杭州分公司
   projectName: 棱镜项目
-  
+  db: postgresql
+  url: jdbc:postgresql://192.168.173.239:5432/middleground?stringtype=unspecified
+  username: dbadmin
+  password: runlion-mid-123
+  driver-class-name: org.postgresql.Driver
+  # 使用druid数据源
+  type: com.alibaba.druid.pool.DruidDataSource
 ```
 
 #### 2.5使用
