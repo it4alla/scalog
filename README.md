@@ -23,7 +23,7 @@ scalog的实现也是基于切面和注解，但是可以打包为jar的形式�
 		<dependency>
 			<groupId>com.java4all</groupId>
 			<artifactId>scalog</artifactId>
-			<version>1.0.0-RELEASE</version>
+			<version>1.3.0-RELEASE</version>
 		</dependency>
 ```
 #### 2.3配置扫描
@@ -32,7 +32,7 @@ scalog的实现也是基于切面和注解，但是可以打包为jar的形式�
 ```java
 @ComponentScan("com.runlion.fsp")
 ```
-新增scalog的扫描
+新增scalog的扫描:com.java4all
 ```java
 @ComponentScan({"com.runlion.fsp","com.java4all"})
 ```
@@ -63,9 +63,9 @@ scalog:
   companyName: 谷歌杭州分公司
   projectName: 棱镜项目
   db: postgresql
-  url: jdbc:postgresql://192.168.173.239:5432/middleground?stringtype=unspecified
-  username: dbadmin
-  password: runlion-mid-123
+  url: jdbc:postgresql://xxx.xxx.xxx.xxx:5432/xxx?stringtype=unspecified
+  username: xxxx
+  password: xxxxx
   driver-class-name: org.postgresql.Driver
   # 使用druid数据源
   type: com.alibaba.druid.pool.DruidDataSource
