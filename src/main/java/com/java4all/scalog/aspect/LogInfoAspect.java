@@ -64,7 +64,8 @@ public class LogInfoAspect implements InitializingBean {
 
     private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static ThreadPoolExecutor executor =
-            new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),8,10,
+            new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),
+                    Runtime.getRuntime().availableProcessors()*2,10,
             TimeUnit.SECONDS,new LinkedBlockingQueue<>(100000),
             new NameThreadFactory(),new CallerRunsPolicy());
     @Autowired
