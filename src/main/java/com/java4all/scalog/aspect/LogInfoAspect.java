@@ -143,6 +143,23 @@ public class LogInfoAspect implements InitializingBean {
 
         //use Gson can resolve the args contains File,FastJson is not support
         String result = new Gson().toJson(proceed);
+
+        String userId = "";
+
+        /*------------warn::::::only for runlion------------*/
+        /*------------warn::::::only for runlion------------*/
+        /*------------warn::::::only for runlion------------*/
+//        try {
+//            UserInfo currentUser = UserInfoUtil.getCurrentUser(UserInfo.class);
+//            userId = currentUser.getUserId();
+//            dto.setUserId(userId);
+//        }catch (Exception ex){
+//            LOGGER.warn("Get current user failed,But it does not affect business logic,{}",ex.getMessage(),ex);
+//        }
+        /*------------warn::::::only for runlion------------*/
+        /*------------warn::::::only for runlion------------*/
+        /*------------warn::::::only for runlion------------*/
+
         executor.execute(()-> {
             try {
                 this.writeLog(joinPoint, dto,startTime,endTime, result, clazz, method);
@@ -173,18 +190,9 @@ public class LogInfoAspect implements InitializingBean {
             dto.setFunctionName(logInfo.functionName());
             dto.setRemark(logInfo.remark());
         }
-        String userId = "";
-//        only for runlion
-//        try {
-//            UserInfo currentUser = UserInfoUtil.getCurrentUser(UserInfo.class);
-//            userId = currentUser.getUserId();
-//        }catch (Exception ex){
-//            LOGGER.warn("Get current user failed,But it does not affect business logic,{}",ex.getMessage(),ex);
-//        }
         dto.setClassName(clazz.toString());
         dto.setMethodName(method.getName());
         dto.setRequestParams(new Gson().toJson(joinPoint.getArgs()));
-        dto.setUserId(userId);
         dto.setCost(endTime-startTime);
         dto.setResult(result);
         dto.setGmtStart(FORMAT
