@@ -26,6 +26,23 @@ scalog的实现也是基于切面和注解，但是可以打包为jar的形式�
 			<version>1.3.0-RELEASE</version>
 		</dependency>
 ```
+⚠⚠⚠：还需要自行引入对应的数据源依赖。比如你打算使用postgresql存储，还需要引入
+```java
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.2.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jdbc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>druid</artifactId>
+      <version>1.1.10</version>
+    </dependency>
+```
 #### 2.3配置扫描
 项目启动类中，配置组件扫描路径。
 例如，本身项目的扫描路径为：
