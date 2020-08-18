@@ -1,6 +1,7 @@
 package com.java4all.scalog.store.executor;
 
 import com.alibaba.fastjson.JSON;
+import com.java4all.scalog.annotation.LoadLevel;
 import com.java4all.scalog.store.LogInfoDto;
 import com.java4all.scalog.store.MongoLogInfo;
 import com.java4all.scalog.utils.BaseHelper;
@@ -17,6 +18,7 @@ import static com.java4all.scalog.configuration.Constants.DEFAULT_MONGO_DB;
 /**
  * MongoDB Executor
  */
+@LoadLevel(name = "mongodb")
 public class MongoExecutor implements BaseSqlExecutor{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoExecutor.class);

@@ -1,5 +1,6 @@
 package com.java4all.scalog.store.source;
 
+import com.java4all.scalog.annotation.LoadLevel;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
@@ -13,6 +14,7 @@ import static com.java4all.scalog.configuration.Constants.*;
 /**
  * @author wangzhongxiang
  */
+@LoadLevel(name = "mongodb")
 public class MongoDataSourceGenerator implements SourceGenerator{
 
     @Override
