@@ -36,6 +36,7 @@ scalog的实现也是基于切面和注解，但是可以打包为jar的形式�
 ```java
 @ComponentScan({"com.runlion.fsp","com.java4all"})
 ```
+⚠⚠⚠：如果项目本身没配置这个路径，这里并不能简单的配置为@ComponentScan("com.java4all")，这样你项目所有的组件都会失效，项目接口404。所以项目的基本扫描路径还是要加上的，然后后面再加上com.java4all。⚠⚠⚠
 
 #### 2.5配置文件
 提供配置项如下：
