@@ -6,7 +6,7 @@
 目前项目中大多数方案是用切面或者拦截器配合注解来做，但是会存在一个问题：每个web项目都要单独实现或者copy一份此逻辑。
 scalog的实现也是基于切面和注解，但是可以打包为jar的形式，项目中直接引入pom依赖即可。
 
-目前支持3种策略：
+目前支持4种策略：
 - nothing：关闭日志记录，切面不记录任何日志
 - specified：仅添加@LogInfo注解的接口才会记录
 - all：记录所有的接口
@@ -18,6 +18,7 @@ scalog的实现也是基于切面和注解，但是可以打包为jar的形式�
 在项目数据库中创建数据库表
 - [mysql脚本](https://github.com/it4alla/scalog/tree/master/src/main/resource/sql/mysql.sql)
 - [oracle脚本](https://github.com/it4alla/scalog/tree/master/src/main/resource/sql/oracle.sql)
+- [postgresql脚本](https://github.com/it4alla/scalog/tree/master/src/main/resource/sql/postgresql.sql)
 #### 2.2项目中引入pom依赖
 ```java
 		<dependency>
