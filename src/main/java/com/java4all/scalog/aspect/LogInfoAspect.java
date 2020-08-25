@@ -21,6 +21,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
+
+import com.mongodb.MongoClient;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -224,11 +226,10 @@ public class LogInfoAspect implements InitializingBean {
             sqlExecutor = EnhanceServiceLoader.load(BaseSqlExecutor.class,dbType,
                     new Class[]{DataSource.class},new Object[]{(DataSource)source});
         }
-//        else if(MONGO_DB.equalsIgnoreCase(dbType)){
-//            //TODO 待处理
-//            sqlExecutor = EnhanceServiceLoader.load(BaseSqlExecutor.class,dbType,
-//                    new Class[]{MongoClient.class},new Object[]{(MongoClient)source});
-//        }
+        else if(MONGO_DB.equalsIgnoreCase(dbType)){
+            sqlExecutor = EnhanceServiceLoader.load(BaseSqlExecutor.class,dbType,
+                    new Class[]{MongoClient.class},new Object[]{(MongoClient)source});
+        }
     }
 
 
