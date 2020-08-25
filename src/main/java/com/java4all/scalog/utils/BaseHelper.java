@@ -19,8 +19,6 @@ public class BaseHelper {
     /**
      * @param resource
      * @param target
-     * @param <T>
-     * @param <R>
      * @return
      * @apiNote resource to target
      */
@@ -41,10 +39,7 @@ public class BaseHelper {
     /**
      * @param resourceList
      * @param target
-     * @param <T>
-     * @param <R>
      * @return
-     * @apiNote resourceList to target type list
      */
     public static <T, R> List<T> convertTotargetList(List<R> resourceList, Class<T> target) {
         List<T> tList = new ArrayList<>();
@@ -65,17 +60,22 @@ public class BaseHelper {
      */
     public static Map<String, Object> objectToMap(Object obj) {
         Map<String, Object> map = new HashMap<String, Object>();
-        Field[] fields = obj.getClass().getDeclaredFields();	// 获取f对象对应类中的所有属性域
+        // 获取f对象对应类中的所有属性域
+        Field[] fields = obj.getClass().getDeclaredFields();
         for (int i = 0, len = fields.length; i < len; i++) {
             String varName = fields[i].getName();
             try {
-                boolean accessFlag = fields[i].isAccessible();	// 获取原来的访问控制权限
-                fields[i].setAccessible(true);					// 修改访问控制权限
-                Object o = fields[i].get(obj);					// 获取在对象f中属性fields[i]对应的对象中的变量
+                // 获取原来的访问控制权限
+                boolean accessFlag = fields[i].isAccessible();
+                // 修改访问控制权限
+                fields[i].setAccessible(true);
+                // 获取在对象f中属性fields[i]对应的对象中的变量
+                Object o = fields[i].get(obj);
                 if (o != null){
                     map.put(varName, o.toString());
                 }
-                fields[i].setAccessible(accessFlag);			// 恢复访问控制权限
+                // 恢复访问控制权限
+                fields[i].setAccessible(accessFlag);
             } catch (IllegalArgumentException ex) {
                 ex.printStackTrace();
             } catch (IllegalAccessException ex) {
