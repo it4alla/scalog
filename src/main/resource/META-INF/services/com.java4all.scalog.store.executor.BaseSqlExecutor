@@ -1,4 +1,4 @@
 com.java4all.scalog.store.executor.MysqlSqlExecutor
 com.java4all.scalog.store.executor.OracleSqlExecutor
 com.java4all.scalog.store.executor.PostgreSqlExecutor
-com.java4all.scalog.store.executor.MongoExecutor
+com.java4all.scalog.store.executor.MongoDBExecutor

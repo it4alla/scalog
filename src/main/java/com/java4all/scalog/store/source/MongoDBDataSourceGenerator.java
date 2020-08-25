@@ -7,13 +7,17 @@ import com.mongodb.ServerAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.java4all.scalog.configuration.Constants.*;
+import static com.java4all.scalog.configuration.Constants.DEFAULT_MONGO_PORT;
+import static com.java4all.scalog.configuration.Constants.DEFAULT_MONGO_URL;
+import static com.java4all.scalog.configuration.Constants.DEFAULT_MONGO_USERNAME;
+import static com.java4all.scalog.configuration.Constants.DEFAULT_MONGO_DB;
+import static com.java4all.scalog.configuration.Constants.DEFAULT_MONGO_PASSWORD;
 
 /**
  * @author dsl
  */
 @LoadLevel(name = "mongodb")
-public class MongoDataSourceGenerator implements SourceGenerator{
+public class MongoDBDataSourceGenerator implements SourceGenerator{
 
     @Override
     public Object generateSource() {

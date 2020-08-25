@@ -15,20 +15,20 @@ import java.util.Map;
 import static com.java4all.scalog.configuration.Constants.DEFAULT_MONGO_DB;
 import static com.java4all.scalog.configuration.Constants.DEFAULT_MONGO_DOCUMENT;
 
-/**
+/**niyi
  * MongoDB Executor
  */
 @LoadLevel(name = "mongodb")
-public class MongoExecutor implements BaseSqlExecutor{
+public class MongoDBExecutor implements BaseSqlExecutor{
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MongoExecutor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MongoDBExecutor.class);
 
     private MongoClient mongoClient = null;
 
-    public MongoExecutor() {
+    public MongoDBExecutor() {
     }
 
-    public MongoExecutor(MongoClient mongoClient) {
+    public MongoDBExecutor(MongoClient mongoClient) {
         this.mongoClient = mongoClient;
     }
 
