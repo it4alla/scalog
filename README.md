@@ -24,11 +24,11 @@ scalog的优势：
 - all：记录所有的接口
 - some：记录所有接口，但是不记录添加了@LogInfoExclude的接口
 
-目前支持2种数据库：
+目前支持3种数据库：
 - mysql
 - oracle (待实现)
 - postgresql 
-- mongodb (待实现)
+- mongodb
 - es (待实现)
 
 ### 2.使用
