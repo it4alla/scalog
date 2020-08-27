@@ -115,7 +115,7 @@ scalog:
 但是，以下几个字段，是可选项，切面无法拿到，默认为空：
 ```java
   `module_name` char(200) DEFAULT NULL COMMENT '模块名称',
-  `function_name` char(200) DEFAULT NULL COMMENT '功能名称',
+  `function_name` char(500) DEFAULT NULL COMMENT '功能名称',
   `remark` char(200) DEFAULT NULL COMMENT '备注',
 ```
 由于切面无法拿到，但是项目中需要定制化记录，所以提供了@LogInfo注解来记录，例如：
