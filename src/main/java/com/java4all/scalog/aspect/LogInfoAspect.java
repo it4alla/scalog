@@ -145,7 +145,11 @@ public class LogInfoAspect implements InitializingBean {
         request2LogInfoDto(request,dto);
 
         //use Gson can resolve the args contains File,FastJson is not support
-        String result = new Gson().toJson(proceed);
+        Boolean needResult = properties.getNeedResult();
+        String result = null;
+        if (null != needResult && needResult){
+            result = new Gson().toJson(proceed);
+        }
 
         String userId = "";
 
@@ -163,9 +167,10 @@ public class LogInfoAspect implements InitializingBean {
         /*------------warn::::::only for runlion------------*/
         /*------------warn::::::only for runlion------------*/
 
+        String finalResult = result;
         executor.execute(()-> {
             try {
-                this.writeLog(joinPoint, dto,startTime,endTime, result, clazz, method);
+                this.writeLog(joinPoint, dto,startTime,endTime, finalResult, clazz, method);
             } catch (Exception e) {
                 LOGGER.warn("{}.{} log info write failed,But it does not affect business logic:{}",
                         clazz.toString(),method.getName(),e.getMessage(),e);

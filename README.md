@@ -84,6 +84,7 @@ scalog的优势：
 - scalog.organizationName 组织名称
 - scalog.companyName 公司名称
 - scalog.projectName 项目名称
+- scalog.needResult 是否记录请求响应结果(true-记录 / false-不记录)
 - scalog.db 日志存储的数据库，支持 mysql , postgresql (oracle , mongodb待实现)
 - scalog.url 数据库url
 - scalog.username 数据库用户名
