@@ -1,0 +1,4 @@
+com.java4all.scalog.store.source.MysqlDataSourceGenerator
+com.java4all.scalog.store.source.MongoDBDataSourceGenerator
+com.java4all.scalog.store.source.OracleDataSourceGenerator
+com.java4all.scalog.store.source.PostgreSqlDataSourceGenerator
