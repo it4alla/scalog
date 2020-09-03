@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
+import com.java4all.scalog.utils.UserInfoUtil;
 import com.mongodb.MongoClient;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -151,21 +152,10 @@ public class LogInfoAspect implements InitializingBean {
             result = new Gson().toJson(proceed);
         }
 
-        String userId = "";
-
-        /*------------warn::::::only for runlion------------*/
-        /*------------warn::::::only for runlion------------*/
-        /*------------warn::::::only for runlion------------*/
-//        try {
-//            UserInfo currentUser = UserInfoUtil.getCurrentUser(UserInfo.class);
-//            userId = currentUser.getUserId();
-//            dto.setUserId(userId);
-//        }catch (Exception ex){
-//            LOGGER.warn("Get current user failed,But it does not affect business logic,{}",ex.getMessage(),ex);
-//        }
-        /*------------warn::::::only for runlion------------*/
-        /*------------warn::::::only for runlion------------*/
-        /*------------warn::::::only for runlion------------*/
+        String userId = UserInfoUtil.getUserId(request);
+        if (!StringUtils.isEmpty(userId)){
+            dto.setUserId(userId);
+        }
 
         String finalResult = result;
         executor.execute(()-> {

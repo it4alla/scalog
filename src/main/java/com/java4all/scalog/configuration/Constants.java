@@ -36,4 +36,11 @@ public class Constants {
     public static final String DEFAULT_MONGO_PASSWORD = "admin";
     public static final String DEFAULT_MONGO_DB = "scalog";
     public static final String DEFAULT_MONGO_DOCUMENT = "mongoLogInfo";
+
+    /**request header */
+    public static final  String AUTH_HEADER = "Authorization";
+    public static final  String PARAM_AUTH = "token";
+    public static final  String CODE_FORMAT = "UTF-8";
+    public static final  String USER_ID = "user_id";
+    public static final  String USERID = "userId";
 }
