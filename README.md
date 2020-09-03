@@ -96,6 +96,7 @@ scalog的优势：
 - scalog.password 数据库密码
 - scalog.driver-class-name 数据库驱动
 - scalog.type  数据库数据源
+- scalog.scaEnable  是否启用全局日志记录(默认true 启用 /false 禁用)
 
 
 示例：

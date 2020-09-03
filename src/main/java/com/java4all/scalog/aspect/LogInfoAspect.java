@@ -84,10 +84,13 @@ public class LogInfoAspect implements InitializingBean {
 
     @Around("pointCut()")
     public Object aroundPointCut(ProceedingJoinPoint joinPoint) throws Throwable {
+        Boolean scaEnable = properties.getScaEnable();
+        if(scaEnable!=null&&scaEnable==false){
+            return joinPoint.proceed();
+        }
         long startTime = System.currentTimeMillis();
         Object proceed = joinPoint.proceed();
         long endTime = System.currentTimeMillis();
-
         ServletRequestAttributes attributes =
                 (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
@@ -186,7 +189,7 @@ public class LogInfoAspect implements InitializingBean {
         if(null != logInfo){
             dto.setModuleName(logInfo.moduleName());
             dto.setFunctionName(logInfo.functionName());
-            dto.setRemark(logInfo.remark());
+            //dto.setRemark(logInfo.remark());
         }
         dto.setClassName(clazz.toString());
         dto.setMethodName(method.getName());
