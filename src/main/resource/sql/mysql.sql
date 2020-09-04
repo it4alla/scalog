@@ -26,5 +26,7 @@ CREATE TABLE `log_info` (
     `gmt_end` datetime DEFAULT NULL COMMENT '操作结束时间',
     `gmt_create` datetime DEFAULT NULL COMMENT '创建时间',
     `gmt_modified` datetime DEFAULT NULL COMMENT '修改时间',
+    `error_message` varchar(2000) DEFAULT NULL COMMENT '错误信息',
+    `error_stack_trace` varchar(2000) DEFAULT NULL COMMENT '错误堆栈',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='接口日志记录表';

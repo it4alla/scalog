@@ -8,6 +8,9 @@ import com.java4all.scalog.store.executor.BaseSqlExecutor;
 import com.java4all.scalog.store.LogInfoDto;
 import com.java4all.scalog.store.source.SourceGenerator;
 import com.java4all.scalog.utils.EnhanceServiceLoader;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -88,9 +91,6 @@ public class LogInfoAspect implements InitializingBean {
         if(scaEnable!=null&&scaEnable==false){
             return joinPoint.proceed();
         }
-        long startTime = System.currentTimeMillis();
-        Object proceed = joinPoint.proceed();
-        long endTime = System.currentTimeMillis();
         ServletRequestAttributes attributes =
                 (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
@@ -98,78 +98,91 @@ public class LogInfoAspect implements InitializingBean {
         Class<? extends MethodSignature> clazz = signature.getDeclaringType();
         Method method = signature.getMethod();
 
-        //not a web controller class,skip
-        if(!clazz.isAnnotationPresent(Controller.class)
-                && !clazz.isAnnotationPresent(RestController.class)) {
-            if(LOGGER.isDebugEnabled()) {
-                LOGGER.debug("{} not a web controller class,skip",clazz.toString());
-            }
-            return proceed;
-        }
-        //not a web controller method,skip
-        if(!method.isAnnotationPresent(RequestMapping.class)
-                && !method.isAnnotationPresent(GetMapping.class)
-                && !method.isAnnotationPresent(PostMapping.class)
-                && !method.isAnnotationPresent(PutMapping.class)
-                && !method.isAnnotationPresent(DeleteMapping.class)
-                && !method.isAnnotationPresent(PatchMapping.class)) {
-            if(LOGGER.isDebugEnabled()) {
-                LOGGER.debug("{}.{} not a web controller method,skip",clazz.toString(),method.getName());
-            }
-            return proceed;
-        }
-
-        String level = properties.getLevel();
-        if(StringUtils.isEmpty(level)){
-            level  = DEFAULT_LEVEL;
-        }
-        if(LEVEL_NOTHING.equalsIgnoreCase(level)){
-            return proceed;
-        }
-        boolean logInfoExcludePresent = method.isAnnotationPresent(LogInfoExclude.class);
-        if(logInfoExcludePresent){
-            return proceed;
-        }
-        boolean logInfoPresent = method.isAnnotationPresent(LogInfo.class);
-        if(LEVEL_SPECIFIED.equals(level)){
-            if(!logInfoPresent){
-                return proceed;
-            }
-        }
-
         LogInfoDto dto = new LogInfoDto();
-
         dto.setCountryName(properties.getCountryName());
         dto.setGroupName(properties.getGroupName());
         dto.setOrganizationName(properties.getOrganizationName());
         dto.setCompanyName(properties.getCompanyName());
         dto.setProjectName(properties.getProjectName());
-
         //Cannot be processed asynchronously，it will lose request attributes
         request2LogInfoDto(request,dto);
-
-        //use Gson can resolve the args contains File,FastJson is not support
-        Boolean needResult = properties.getNeedResult();
+        Object proceed =null;
+        long startTime = 0L;
+        long endTime = 0L;
         String result = null;
-        if (null != needResult && needResult){
-            result = new Gson().toJson(proceed);
-        }
-
-        String userId = UserInfoUtil.getUserId(request);
-        if (!StringUtils.isEmpty(userId)){
-            dto.setUserId(userId);
-        }
-
-        String finalResult = result;
-        executor.execute(()-> {
-            try {
-                this.writeLog(joinPoint, dto,startTime,endTime, finalResult, clazz, method);
-            } catch (Exception e) {
-                LOGGER.warn("{}.{} log info write failed,But it does not affect business logic:{}",
-                        clazz.toString(),method.getName(),e.getMessage(),e);
+        try {
+            startTime = System.currentTimeMillis();
+            proceed = joinPoint.proceed();
+            endTime = System.currentTimeMillis();
+            //not a web controller class,skip
+            if(!clazz.isAnnotationPresent(Controller.class)
+                    && !clazz.isAnnotationPresent(RestController.class)) {
+                if(LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("{} not a web controller class,skip",clazz.toString());
+                }
+                return proceed;
             }
-        });
-        return proceed;
+            //not a web controller method,skip
+            if(!method.isAnnotationPresent(RequestMapping.class)
+                    && !method.isAnnotationPresent(GetMapping.class)
+                    && !method.isAnnotationPresent(PostMapping.class)
+                    && !method.isAnnotationPresent(PutMapping.class)
+                    && !method.isAnnotationPresent(DeleteMapping.class)
+                    && !method.isAnnotationPresent(PatchMapping.class)) {
+                if(LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("{}.{} not a web controller method,skip",clazz.toString(),method.getName());
+                }
+                return proceed;
+            }
+
+            String level = properties.getLevel();
+            if(StringUtils.isEmpty(level)){
+                level  = DEFAULT_LEVEL;
+            }
+            if(LEVEL_NOTHING.equalsIgnoreCase(level)){
+                return proceed;
+            }
+            boolean logInfoExcludePresent = method.isAnnotationPresent(LogInfoExclude.class);
+            if(logInfoExcludePresent){
+                return proceed;
+            }
+            boolean logInfoPresent = method.isAnnotationPresent(LogInfo.class);
+            if(LEVEL_SPECIFIED.equals(level)){
+                if(!logInfoPresent){
+                    return proceed;
+                }
+            }
+            Boolean needResult = properties.getNeedResult();
+            String userId = UserInfoUtil.getUserId(request);
+            if (!StringUtils.isEmpty(userId)){
+                dto.setUserId(userId);
+            }
+            if (null != needResult && needResult){
+                result = new Gson().toJson(proceed);
+            }
+            return proceed;
+        } catch (Exception e) {
+            endTime = System.currentTimeMillis();
+            e.printStackTrace();
+            dto.setErrorMessage(e.getMessage());
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw, true));
+            dto.setErrorStackTrace(sw.toString());
+            throw e;
+        }finally {
+            final long startTimeF = startTime;
+            final long endTimeF = endTime;
+            final String finalResult = result;
+            executor.execute(()-> {
+                try {
+                    this.writeLog(joinPoint, dto,startTimeF,endTimeF, finalResult, clazz, method);
+                } catch (Exception e) {
+                    LOGGER.warn("{}.{} log info write failed,But it does not affect business logic:{}",
+                            clazz.toString(),method.getName(),e.getMessage(),e);
+                }
+            });
+
+        }
     }
 
     private void request2LogInfoDto(HttpServletRequest request,LogInfoDto dto){
