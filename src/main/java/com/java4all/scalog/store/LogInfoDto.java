@@ -57,6 +57,11 @@ public class LogInfoDto {
     /**修改时间*/
     private String gmtModified;
 
+    /**错误信息*/
+    private String errorMessage;
+    /**错误堆栈*/
+    private String errorStackTrace;
+
     public String getErrorMessage() {
         return errorMessage;
     }
@@ -72,11 +77,6 @@ public class LogInfoDto {
     public void setErrorStackTrace(String errorStackTrace) {
         this.errorStackTrace = errorStackTrace;
     }
-
-    /**错误信息*/
-    private String errorMessage;
-    /**错误堆栈*/
-    private String errorStackTrace;
 
     public String getId() {
         return id;

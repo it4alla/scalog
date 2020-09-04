@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
+import com.java4all.scalog.utils.UserInfoUtil;
 import com.mongodb.MongoClient;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -152,7 +153,10 @@ public class LogInfoAspect implements InitializingBean {
                 }
             }
             Boolean needResult = properties.getNeedResult();
-
+            String userId = UserInfoUtil.getUserId(request);
+            if (!StringUtils.isEmpty(userId)){
+                dto.setUserId(userId);
+            }
             if (null != needResult && needResult){
                 result = new Gson().toJson(proceed);
             }
@@ -198,7 +202,7 @@ public class LogInfoAspect implements InitializingBean {
         if(null != logInfo){
             dto.setModuleName(logInfo.moduleName());
             dto.setFunctionName(logInfo.functionName());
-            dto.setRemark(logInfo.remark());
+            //dto.setRemark(logInfo.remark());
         }
         dto.setClassName(clazz.toString());
         dto.setMethodName(method.getName());
