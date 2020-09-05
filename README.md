@@ -11,9 +11,10 @@ scalog的功能很简单：🔥🔥记录接口请求日志🔥🔥
 考虑到现在项目都微服务化，大量的微服务都需要记录请求日志，但是没有找到符合我们需求的轻量级的好的实现方案，因此有了此项目。
 
 收集的数据，我们可以接入可视化工具中，比如Grafana,效果如下：
-![](https://github.com/it4alla/scalog/blob/master/src/main/resource/images/1.png)
-![](https://github.com/it4alla/scalog/blob/master/src/main/resource/images/2.png)
-![](https://github.com/it4alla/scalog/blob/master/src/main/resource/images/3.png)
+
+![1](https://github.com/it4alla/scalog/blob/master/src/main/resource/images/1.png)
+![2](https://github.com/it4alla/scalog/blob/master/src/main/resource/images/2.png)
+![3](https://github.com/it4alla/scalog/blob/master/src/main/resource/images/3.png)
 
 scalog的优势：
 
