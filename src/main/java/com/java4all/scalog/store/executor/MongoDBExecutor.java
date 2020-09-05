@@ -35,12 +35,12 @@ public class MongoDBExecutor implements BaseSqlExecutor{
     @Override
     public void insert(LogInfoDto dto) throws Exception {
         MongoDatabase database = mongoClient.getDatabase(DEFAULT_MONGO_DB);
-        //获取集合
+
         MongoCollection<Document> collection = database.getCollection(DEFAULT_MONGO_DOCUMENT);
-        //要插入的数据
+
         Map<String, Object> map = BaseHelper.objectToMap(dto);
         Document document = new Document(map);
-        //插入一个文档
+
         collection.insertOne(document);
     }
 }
