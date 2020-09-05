@@ -64,6 +64,8 @@ public class PostgreSqlExecutor implements BaseSqlExecutor{
             ps.setInt(22,1);
             ps.setString(23,dto.getGmtStart());
             ps.setString(24,dto.getGmtEnd());
+            ps.setString(25,dto.getErrorMessage());
+            ps.setString(26,dto.getErrorStackTrace());
             ps.execute();
         } catch (SQLException e) {
             LOGGER.error("log info insert failed,But it does not affect business logic:{}",e.getMessage(),e);

@@ -25,7 +25,9 @@ create table log_info (
       gmt_start timestamp without time zone,
       gmt_end timestamp without time zone,
       gmt_create timestamp without time zone,
-      gmt_modified timestamp without time zone
+      gmt_modified timestamp without time zone,
+      error_message text,
+      error_stack_trace text
 );
 
 # add comment
@@ -54,3 +56,5 @@ comment on column log_info.gmt_start is '操作开始时间';
 comment on column log_info.gmt_end is '操作结束时间';
 comment on column log_info.gmt_create is '创建时间';
 comment on column log_info.gmt_modified is '修改时间';
+comment on column log_info.error_message is '错误信息';
+comment on column log_info.error_stack_trace is'错误堆栈';

@@ -50,6 +50,31 @@ public class ScalogProperties {
     /**project name*/
     private String projectName;
 
+    /**
+     * Store results or not
+     */
+    private Boolean needResult;
+
+    public Boolean getScaEnable() {
+        return scaEnable;
+    }
+
+    public void setScaEnable(Boolean scaEnable) {
+        this.scaEnable = scaEnable;
+    }
+
+    /**
+     * global scalog enable (true or false)
+     */
+    private Boolean scaEnable;
+
+    public Boolean getNeedResult() {
+        return needResult;
+    }
+
+    public void setNeedResult(Boolean needResult) {
+        this.needResult = needResult;
+    }
 
     public String getDb() {
         return db;

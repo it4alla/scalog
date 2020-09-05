@@ -8,7 +8,12 @@ scalog的功能很简单：🔥🔥记录接口请求日志🔥🔥
 
 目前项目中大多数方案是用切面或者拦截器配合注解来做，但是会存在一个问题：每个web项目都要单独实现或者copy一份此逻辑。
 
-考虑到现在项目都微服务化，大量的微服务都需要记录请求日志，几百个微服务都有的需求，但是没有找到轻量级的好的实现方案，因此有了此项目。
+考虑到现在项目都微服务化，大量的微服务都需要记录请求日志，但是没有找到符合我们需求的轻量级的好的实现方案，因此有了此项目。
+
+收集的数据，我们可以接入可视化工具中，比如Grafana,效果如下：
+![](https://github.com/it4alla/scalog/blob/master/src/main/resource/images/1.png)
+![](https://github.com/it4alla/scalog/blob/master/src/main/resource/images/2.png)
+![](https://github.com/it4alla/scalog/blob/master/src/main/resource/images/3.png)
 
 scalog的优势：
 
@@ -84,12 +89,14 @@ scalog的优势：
 - scalog.organizationName 组织名称
 - scalog.companyName 公司名称
 - scalog.projectName 项目名称
+- scalog.needResult 是否记录请求响应结果(true-记录 / false-不记录)
 - scalog.db 日志存储的数据库，支持 mysql , postgresql (oracle , mongodb待实现)
 - scalog.url 数据库url
 - scalog.username 数据库用户名
 - scalog.password 数据库密码
 - scalog.driver-class-name 数据库驱动
 - scalog.type  数据库数据源
+- scalog.scaEnable  是否启用全局日志记录(默认true 启用 /false 禁用)
 
 
 示例：
