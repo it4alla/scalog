@@ -33,7 +33,7 @@ scalog的优势：
 - mysql
 - oracle (待实现)
 - postgresql 
-- mongodb
+- mongodb (待实现)
 - es (待实现)
 
 ### 2.使用
@@ -69,7 +69,7 @@ scalog的优势：
       <version>1.1.10</version>
     </dependency>
 ```
-#### 2.3配置扫描
+#### 2.3配置扫描(1.3之后的版本无需单独配置scalog的扫描，可以省略此步骤)
 项目启动类中，配置组件扫描路径。
 例如，本身项目的扫描路径为：
 ```java
@@ -89,14 +89,14 @@ scalog的优势：
 - scalog.organizationName 组织名称
 - scalog.companyName 公司名称
 - scalog.projectName 项目名称
-- scalog.needResult 是否记录请求响应结果(true-记录 / false-不记录)
+- scalog.needResult 是否记录请求响应结果(true 记录 / false 不记录)
+- scalog.enable  是否启用全局日志记录(默认true 启用 / false 禁用)
 - scalog.db 日志存储的数据库，支持 mysql , postgresql (oracle , mongodb待实现)
 - scalog.url 数据库url
 - scalog.username 数据库用户名
 - scalog.password 数据库密码
 - scalog.driver-class-name 数据库驱动
 - scalog.type  数据库数据源
-- scalog.scaEnable  是否启用全局日志记录(默认true 启用 /false 禁用)
 
 
 示例：
@@ -108,6 +108,8 @@ scalog:
   organizationName: 谷歌开源组织
   companyName: 谷歌杭州分公司
   projectName: 棱镜项目
+  enable: true
+  needResult: false
   db: postgresql
   url: jdbc:postgresql://xxx.xxx.xxx.xxx:5432/xxx?stringtype=unspecified
   username: xxxx

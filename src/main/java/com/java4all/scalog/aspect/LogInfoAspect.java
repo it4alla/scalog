@@ -87,8 +87,8 @@ public class LogInfoAspect implements InitializingBean {
 
     @Around("pointCut()")
     public Object aroundPointCut(ProceedingJoinPoint joinPoint) throws Throwable {
-        Boolean scaEnable = properties.getScaEnable();
-        if(scaEnable!=null&&scaEnable==false){
+        Boolean enable = properties.getEnable();
+        if(enable != null && enable == false){
             return joinPoint.proceed();
         }
         ServletRequestAttributes attributes =
@@ -166,7 +166,7 @@ public class LogInfoAspect implements InitializingBean {
             dto.setErrorMessage(e.getMessage());
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw, true));
-            dto.setErrorStackTrace(sw.toString());
+            dto.setErrorStackTrace(sw.toString().substring(0,2000));
             throw e;
         }finally {
             final long startTimeF = startTime;

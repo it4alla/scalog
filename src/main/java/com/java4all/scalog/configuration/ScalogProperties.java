@@ -55,18 +55,18 @@ public class ScalogProperties {
      */
     private Boolean needResult;
 
-    public Boolean getScaEnable() {
-        return scaEnable;
-    }
-
-    public void setScaEnable(Boolean scaEnable) {
-        this.scaEnable = scaEnable;
-    }
-
     /**
      * global scalog enable (true or false)
      */
-    private Boolean scaEnable;
+    private Boolean enable;
+
+    public Boolean getEnable() {
+        return enable;
+    }
+
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
+    }
 
     public Boolean getNeedResult() {
         return needResult;
