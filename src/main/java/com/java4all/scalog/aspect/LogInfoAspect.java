@@ -87,8 +87,8 @@ public class LogInfoAspect implements InitializingBean {
 
     @Around("pointCut()")
     public Object aroundPointCut(ProceedingJoinPoint joinPoint) throws Throwable {
-        Boolean scaEnable = properties.getScaEnable();
-        if(scaEnable!=null&&scaEnable==false){
+        Boolean enable = properties.getEnable();
+        if(enable != null && enable == false){
             return joinPoint.proceed();
         }
         ServletRequestAttributes attributes =
@@ -163,11 +163,10 @@ public class LogInfoAspect implements InitializingBean {
             return proceed;
         } catch (Exception e) {
             endTime = System.currentTimeMillis();
-            e.printStackTrace();
             dto.setErrorMessage(e.getMessage());
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw, true));
-            dto.setErrorStackTrace(sw.toString());
+            dto.setErrorStackTrace(sw.toString().substring(0,2000));
             throw e;
         }finally {
             final long startTimeF = startTime;
@@ -178,7 +177,7 @@ public class LogInfoAspect implements InitializingBean {
                     this.writeLog(joinPoint, dto,startTimeF,endTimeF, finalResult, clazz, method);
                 } catch (Exception e) {
                     LOGGER.warn("{}.{} log info write failed,But it does not affect business logic:{}",
-                            clazz.toString(),method.getName(),e.getMessage(),e);
+                            clazz.toString(),method.getName(),e.getMessage());
                 }
             });
 
@@ -202,7 +201,7 @@ public class LogInfoAspect implements InitializingBean {
         if(null != logInfo){
             dto.setModuleName(logInfo.moduleName());
             dto.setFunctionName(logInfo.functionName());
-            //dto.setRemark(logInfo.remark());
+            dto.setRemark(logInfo.remark());
         }
         dto.setClassName(clazz.toString());
         dto.setMethodName(method.getName());
@@ -218,7 +217,7 @@ public class LogInfoAspect implements InitializingBean {
         try {
             sqlExecutor.insert(dto);
         }catch (Exception ex){
-            LOGGER.error("The sqlExecutor may be null,please check,{}",ex.getMessage(),ex);
+            LOGGER.error("The sqlExecutor may be null,please check,{}",ex.getMessage());
         }
     }
 
