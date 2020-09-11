@@ -2,7 +2,7 @@
 ### simple communal automatic log
 ### 1.功能
 
-scalog的功能很简单：🔥🔥记录接口请求日志🔥🔥
+🔥🔥记录接口请求日志🔥🔥
 
 为项目相关分析提供数据支撑。此日志信息有别于项目中的log日志，这里只是记录web接口的请求日志。
 
@@ -15,7 +15,7 @@ scalog的功能很简单：🔥🔥记录接口请求日志🔥🔥
 ![](https://github.com/it4alla/scalog/blob/master/src/main/resource/images/2.png)
 ![](https://github.com/it4alla/scalog/blob/master/src/main/resource/images/3.png)
 
-scalog的优势：
+##### scalog的优势：
 
 - jar推送到仓库后，项目中直接引入maven依赖，进行配置即可使用，对代码0侵入；
 - 考虑到日志记录中有些需要有些不需要记录，我们提供灵活的策略配置让用户自己选择记录哪些日志；
@@ -23,13 +23,14 @@ scalog的优势：
 
 一个简单的功能，在使用上，应该也是没有成本的，但是简单的功能，也可以做的更加通用，易用，可靠，可拓展，可选择，0成本，0倾入。
 
-目前支持4种策略：
-- nothing：关闭日志记录，切面不记录任何日志
+##### 目前支持4种策略：
 - specified：仅添加@LogInfo注解的接口才会记录
 - all：记录所有的接口
 - some：记录所有接口，但是不记录添加了@LogInfoExclude的接口
 
-目前支持3种数据库：
+也可以选择禁用：scalog.enable=false
+
+##### 目前支持3种数据库：
 - mysql
 - oracle (待实现)
 - postgresql 

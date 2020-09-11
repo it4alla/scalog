@@ -9,6 +9,7 @@ import com.java4all.scalog.store.LogInfoDto;
 import com.java4all.scalog.store.source.SourceGenerator;
 import com.java4all.scalog.utils.EnhanceServiceLoader;
 
+import com.java4all.scalog.utils.NameThreadFactory;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
@@ -17,11 +18,9 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
@@ -63,7 +62,6 @@ public class LogInfoAspect implements InitializingBean {
     private static final String MONGO_DB = "mongodb";
     private static final String POSTGRESQL_DB = "postgresql";
     private static final String DEFAULT_DB_TYPE = MYSQL_DB;
-    private static final String LEVEL_NOTHING = "nothing";
     private static final String LEVEL_ALL = "all";
     private static final String LEVEL_SPECIFIED = "specified";
     private static final String DEFAULT_LEVEL = LEVEL_ALL;
@@ -138,9 +136,6 @@ public class LogInfoAspect implements InitializingBean {
             String level = properties.getLevel();
             if(StringUtils.isEmpty(level)){
                 level  = DEFAULT_LEVEL;
-            }
-            if(LEVEL_NOTHING.equalsIgnoreCase(level)){
-                return proceed;
             }
             boolean logInfoExcludePresent = method.isAnnotationPresent(LogInfoExclude.class);
             if(logInfoExcludePresent){
@@ -241,31 +236,5 @@ public class LogInfoAspect implements InitializingBean {
                     new Class[]{MongoClient.class},new Object[]{(MongoClient)source});
         }
     }
-
-
-    /**
-     * name thread factory
-     */
-    private static final class NameThreadFactory implements ThreadFactory {
-        private final ThreadGroup group;
-        private final AtomicInteger index = new AtomicInteger(1);
-
-        public NameThreadFactory() {
-            SecurityManager s = System.getSecurityManager();
-            group = s !=null ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
-        }
-
-        @Override
-        public Thread newThread(Runnable r) {
-            Thread thread = new Thread(group, r, "Java4all-Thread-LogInfo-" + index.getAndIncrement());
-            thread.setDaemon(true);
-            if (thread.getPriority() != Thread.NORM_PRIORITY) {
-                thread.setPriority(Thread.NORM_PRIORITY);
-            }
-            return thread;
-        }
-    }
-
-
 
 }
