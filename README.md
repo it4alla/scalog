@@ -11,9 +11,26 @@ scalog的功能很简单：🔥🔥记录接口请求日志🔥🔥
 考虑到现在项目都微服务化，大量的微服务都需要记录请求日志，但是没有找到符合我们需求的轻量级的好的实现方案，因此有了此项目。
 
 收集的数据，我们可以接入可视化工具中，比如Grafana,效果如下：
-![](https://github.com/it4alla/scalog/blob/master/src/main/resource/images/1.png)
-![](https://github.com/it4alla/scalog/blob/master/src/main/resource/images/2.png)
-![](https://github.com/it4alla/scalog/blob/master/src/main/resource/images/3.png)
+
+
+
+![1](https://imgkr2.cn-bj.ufileos.com/d613cad5-07f5-456a-84d6-f4e5ef39de63.jpg?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=6g%252FYikgXcVKdbCsU6Siui2tnVFI%253D&Expires=1599404088)
+
+
+
+
+
+
+![2](https://imgkr2.cn-bj.ufileos.com/55e81d62-71a5-40ee-8a41-36d4da7bace7.jpg?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=aarnyGG2%252BnW%252FvsVzjlt%252BqwFmXZs%253D&Expires=1599404097)
+
+
+
+
+
+
+![3](https://imgkr2.cn-bj.ufileos.com/969e7802-22ed-42e0-8735-61f3b9ea6cc2.jpg?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=dOJKv2VTgQFDnc3fmGhcIdEb6gA%253D&Expires=1599404103)
+
+
 
 scalog的优势：
 
