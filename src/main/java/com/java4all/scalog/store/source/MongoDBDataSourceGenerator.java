@@ -22,16 +22,15 @@ public class MongoDBDataSourceGenerator implements SourceGenerator{
     @Override
     public Object generateSource() {
         List<ServerAddress> adds = new ArrayList<>();
-        // ServerAddress()两个参数分别为 服务器地址 和 端口
+
         ServerAddress serverAddress = new ServerAddress(DEFAULT_MONGO_URL, DEFAULT_MONGO_PORT);
         adds.add(serverAddress);
 
         List<MongoCredential> credentials = new ArrayList<>();
-        // MongoCredential.createScramSha1Credential()三个参数分别为 用户名 数据库名称 密码
+
         MongoCredential mongoCredential = MongoCredential.createScramSha1Credential(DEFAULT_MONGO_USERNAME, DEFAULT_MONGO_DB, DEFAULT_MONGO_PASSWORD.toCharArray());
         credentials.add(mongoCredential);
 
-        //通过连接认证获取MongoDB连接
         MongoClient mongoClient = new MongoClient(adds, credentials);
         return mongoClient;
     }

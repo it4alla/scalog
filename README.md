@@ -11,9 +11,12 @@
 考虑到现在项目都微服务化，大量的微服务都需要记录请求日志，但是没有找到符合我们需求的轻量级的好的实现方案，因此有了此项目。
 
 收集的数据，我们可以接入可视化工具中，比如Grafana,效果如下：
-![](https://github.com/it4alla/scalog/blob/master/src/main/resource/images/1.png)
-![](https://github.com/it4alla/scalog/blob/master/src/main/resource/images/2.png)
-![](https://github.com/it4alla/scalog/blob/master/src/main/resource/images/3.png)
+
+![1](https://imgkr2.cn-bj.ufileos.com/d613cad5-07f5-456a-84d6-f4e5ef39de63.jpg?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=6g%252FYikgXcVKdbCsU6Siui2tnVFI%253D&Expires=1599404088)
+
+![2](https://imgkr2.cn-bj.ufileos.com/55e81d62-71a5-40ee-8a41-36d4da7bace7.jpg?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=aarnyGG2%252BnW%252FvsVzjlt%252BqwFmXZs%253D&Expires=1599404097)
+
+![3](https://imgkr2.cn-bj.ufileos.com/969e7802-22ed-42e0-8735-61f3b9ea6cc2.jpg?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=dOJKv2VTgQFDnc3fmGhcIdEb6gA%253D&Expires=1599404103)
 
 ##### scalog的优势：
 
@@ -21,7 +24,7 @@
 - 考虑到日志记录中有些需要有些不需要记录，我们提供灵活的策略配置让用户自己选择记录哪些日志；
 - 考虑到用户可能会使用不同的数据库对接口日志进行记录分析，我们提供了多种数据库，用户可以自行配置选择；
 
-一个简单的功能，在使用上，应该也是没有成本的，但是简单的功能，也可以做的更加通用，易用，可靠，可拓展，可选择，0成本，0倾入。
+一个简单的功能，在使用上，应该也是没有成本的，但是简单的功能，也可以做的更加通用，易用，可靠，可拓展，可选择，零成本，零侵入。
 
 ##### 目前支持4种策略：
 - specified：仅添加@LogInfo注解的接口才会记录
