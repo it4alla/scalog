@@ -12,25 +12,11 @@
 
 收集的数据，我们可以接入可视化工具中，比如Grafana,效果如下：
 
-
-
 ![1](https://imgkr2.cn-bj.ufileos.com/d613cad5-07f5-456a-84d6-f4e5ef39de63.jpg?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=6g%252FYikgXcVKdbCsU6Siui2tnVFI%253D&Expires=1599404088)
-
-
-
-
-
 
 ![2](https://imgkr2.cn-bj.ufileos.com/55e81d62-71a5-40ee-8a41-36d4da7bace7.jpg?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=aarnyGG2%252BnW%252FvsVzjlt%252BqwFmXZs%253D&Expires=1599404097)
 
-
-
-
-
-
 ![3](https://imgkr2.cn-bj.ufileos.com/969e7802-22ed-42e0-8735-61f3b9ea6cc2.jpg?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=dOJKv2VTgQFDnc3fmGhcIdEb6gA%253D&Expires=1599404103)
-
-
 
 ##### scalog的优势：
 
