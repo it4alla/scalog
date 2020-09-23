@@ -87,7 +87,7 @@
 
 #### 2.5配置文件
 提供配置项如下：
-- scalog.level 日志的记录策略，支持 nothing , specified , all ,some 
+- scalog.level 日志的记录策略，支持 specified , all ,some 
 - scalog.countryName 国家名称
 - scalog.groupName 集团名称
 - scalog.organizationName 组织名称
@@ -106,14 +106,14 @@
 示例：
 ```java
 scalog:
+  enable: true
   level: all
+  needResult: false
   countryName: 中国
   groupName: 谷歌集团
   organizationName: 谷歌开源组织
   companyName: 谷歌杭州分公司
   projectName: 棱镜项目
-  enable: true
-  needResult: false
   db: postgresql
   url: jdbc:postgresql://xxx.xxx.xxx.xxx:5432/xxx?stringtype=unspecified
   username: xxxx
