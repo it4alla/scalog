@@ -1,26 +1,26 @@
 # create table
 create table log_info (
       id char(50) not null ,
-      country_name char(200),
-      group_name char(200),
-      organization_name char(200),
-      company_name char(200),
-      project_name char(200),
-      module_name char(200),
-      function_name char(500),
-      class_name char(500),
-      method_name char(200),
-      method_type char(200),
+      country_name varchar,
+      group_name varchar,
+      organization_name varchar,
+      company_name varchar ,
+      project_name varchar ,
+      module_name varchar,
+      function_name varchar,
+      class_name varchar,
+      method_name varchar,
+      method_type varchar,
       url text,
       request_params text,
       result text,
-      remark char(200),
+      remark varchar,
       cost int,
       ip char(100),
-      user_id char(200),
-      user_name char(200),
-      client_type char(500),
-      user_agent char(500),
+      user_id varchar,
+      user_name varchar,
+      client_type varchar,
+      user_agent varchar,
       log_type int,
       gmt_start timestamp without time zone,
       gmt_end timestamp without time zone,
@@ -58,3 +58,9 @@ comment on column log_info.gmt_create is '创建时间';
 comment on column log_info.gmt_modified is '修改时间';
 comment on column log_info.error_message is '错误信息';
 comment on column log_info.error_stack_trace is'错误堆栈';
+
+# add index
+CREATE index index_company_name ON log_info(company_name);
+CREATE index index_project_name ON log_info(project_name);
+CREATE index index_user_id ON log_info(user_id);
+CREATE index index_gmt_create ON log_info(gmt_create);
