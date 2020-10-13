@@ -10,7 +10,7 @@
 
 考虑到现在项目都微服务化，大量的微服务都需要记录请求日志，但是没有找到符合我们需求的轻量级的好的实现方案，因此有了此项目。
 
-收集的数据，我们可以接入可视化工具中，比如Grafana,效果如下：
+收集的数据，我们可以接入公司开发的相关信息展示系统，也可以找个可视化工具，比如Grafana,效果如下：
 
 ![1](https://imgkr2.cn-bj.ufileos.com/d613cad5-07f5-456a-84d6-f4e5ef39de63.jpg?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=6g%252FYikgXcVKdbCsU6Siui2tnVFI%253D&Expires=1599404088)
 
@@ -73,19 +73,8 @@
       <version>1.1.10</version>
     </dependency>
 ```
-#### 2.3配置扫描(1.3之后的版本无需单独配置scalog的扫描，可以省略此步骤)
-项目启动类中，配置组件扫描路径。
-例如，本身项目的扫描路径为：
-```java
-@ComponentScan("com.runlion.fsp")
-```
-新增scalog的扫描:com.java4all
-```java
-@ComponentScan({"com.runlion.fsp","com.java4all"})
-```
-⚠⚠⚠：如果项目本身没配置这个路径，这里并不能简单的配置为@ComponentScan("com.java4all")，这样你项目所有的组件都会失效，项目接口404。所以项目的基本扫描路径还是要加上的，然后后面再加上com.java4all。⚠⚠⚠
 
-#### 2.5配置文件
+#### 2.3配置文件
 提供配置项如下：
 - scalog.level 日志的记录策略，支持 specified , all ,some 
 - scalog.countryName 国家名称
@@ -123,7 +112,7 @@ scalog:
   type: com.alibaba.druid.pool.DruidDataSource
 ```
 
-#### 2.5使用
+#### 2.4使用
 上述步骤完成后，接口请求记录已经可以正常记录。
 但是，以下几个字段，是可选项，切面无法拿到，默认为空：
 ```java
@@ -147,7 +136,9 @@ scalog:
         return new ObjectRestResponse().data(fspPageInfo);
     }
 ```
-### 3.用户
-由于不同项目中用户体系不一样，获取用户信息方式也不一样，所以，userId,userName的处理，需要自行处理。此部分还在考虑更好的方案。
+### 3.相关信息
+userId等相关的用户信息，不同微服务获取方式可能不一样。目前处理方式为统一从请求头中获取。
+前端或者移动端请求头中统一添加：user_id或者userId。
+后期会对请求头信息进行拓展。目前只接收userId。
 
 
